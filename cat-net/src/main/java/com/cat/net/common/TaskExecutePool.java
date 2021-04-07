@@ -1,5 +1,7 @@
 package com.cat.net.common;
 
+import org.springframework.scheduling.annotation.EnableAsync;
+
 //@Configuration
 //@EnableAsync
 public class TaskExecutePool {
