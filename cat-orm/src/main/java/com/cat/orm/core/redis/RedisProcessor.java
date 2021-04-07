@@ -33,7 +33,6 @@ public class RedisProcessor {
 	public RedisProcessor(Collection<Class<BasePo>> clazzs, RedisTemplate<String, Serializable> redisTemplate) {
 		this.commonDaoMap = new HashMap<>();
 		for (Class<BasePo> clazz : clazzs) {
-//			BasePo po = basePoMap.get(key);
 			IRedisRepository<BasePo> dao = new RedisRepostory<>(clazz, redisTemplate);
 			commonDaoMap.put(clazz.getSimpleName(), dao);//注意,通过spring注入进来的Map, key默认全部小写
 		}
