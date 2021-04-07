@@ -1,0 +1,17 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.cat</groupId>
+  <artifactId>cat</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>cat</name>
+  <description>A game server named cat, just caz my wife like cats.</description>
+  
+<modules>
+	<!-- 持久层支持 -->
+	<module>cat-orm</module>
+	<!-- 网络层支持 -->
+	<module>cat-net</module>
+</modules>
+  
+</project>

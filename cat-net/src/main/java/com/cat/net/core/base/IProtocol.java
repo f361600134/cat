@@ -1,0 +1,20 @@
+package com.cat.net.core.base;
+
+import com.google.protobuf.AbstractMessageLite.Builder;
+
+/**
+ * 下发协议接口
+ * 
+ * @author Jeremy
+ */
+public interface IProtocol {
+	
+	short protocol();
+	
+	default byte[] toBytes() {
+		return getBuilder().build().toByteArray();
+	}
+	
+	Builder<?, ?> getBuilder();
+	
+}
