@@ -93,6 +93,13 @@
 			<artifactId>spring-context-support</artifactId>
 			<version>5.2.12.RELEASE</version>
 		</dependency>
+		
+		<!-- guava-->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>27.0-jre</version>
+		</dependency>
 
 
 	</dependencies>

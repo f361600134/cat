@@ -2,8 +2,9 @@ package com.cat.net.network.tcp;
 
 import java.io.IOException;
 
-import com.cat.net.core.base.GameSession;
-import com.cat.net.core.base.IServerController;
+import com.cat.net.network.base.GameSession;
+import com.cat.net.network.controller.IServerController;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

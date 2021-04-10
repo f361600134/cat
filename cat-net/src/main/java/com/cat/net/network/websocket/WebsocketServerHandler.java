@@ -2,8 +2,9 @@ package com.cat.net.network.websocket;
 
 import java.io.IOException;
 
-import com.cat.net.core.base.GameSession;
-import com.cat.net.core.base.IServerController;
+import com.cat.net.network.base.GameSession;
+import com.cat.net.network.controller.IServerController;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,7 +96,7 @@ public class WebsocketServerHandler extends SimpleChannelInboundHandler<Object> 
 	 * @param req
 	 */
 	private void handleHttpRequest(ChannelHandlerContext ctx, HttpRequest req) {
-//		log.info("========[{}]处理握手", ctx.channel());
+		log.info("========[{}]处理握手", ctx.channel());
 		// Handle a bad request.
 		if (!req.decoderResult().isSuccess() || (!"websocket".equals(req.headers().get("Upgrade")))) {
 			log.info("[{}]握手失败,[{}][{}]", ctx.channel(), req.decoderResult().isSuccess(),

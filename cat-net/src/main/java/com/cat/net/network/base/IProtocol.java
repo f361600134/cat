@@ -1,4 +1,4 @@
-package com.cat.net.core.base;
+package com.cat.net.network.base;
 
 import com.google.protobuf.AbstractMessageLite.Builder;
 

@@ -2,7 +2,7 @@ package com.cat.net.network.websocket;
 
 import java.util.List;
 
-import com.cat.net.core.base.Packet;
+import com.cat.net.network.base.Packet;
 import com.cat.net.network.protocol.IDefaultProtocolEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

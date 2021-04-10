@@ -1,11 +1,11 @@
 package com.cat.net.network.tcp;
 
-import com.cat.net.common.NetConfig;
-import com.cat.net.core.base.IServerController;
-import com.cat.net.network.bootstrap.AbstractServer;
-import com.cat.net.network.bootstrap.IdleDetectionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.cat.net.network.bootstrap.IdleDetectionHandler;
+import com.cat.net.network.controller.IServerController;
+import com.cat.net.server.AbstractServer;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -45,11 +45,6 @@ public class TcpServerStarter extends AbstractServer {
 
 	public TcpServerStarter() {
 		super();
-	}
-
-	public TcpServerStarter(IServerController serverHandler, NetConfig config) {
-		super(config.getServerIp(), config.getTcpPort());
-		this.serverHandler = serverHandler;
 	}
 
 	public TcpServerStarter(IServerController serverHandler, String ip, int port) {
@@ -99,6 +94,7 @@ public class TcpServerStarter extends AbstractServer {
 			throw new RuntimeException("Netty TCP启动出现异常, 服务器关闭, 请检查");
 		} finally {
 			if (future != null && future.isSuccess()) {
+				serverHandler.serverStatus(true);//开服
 				log.info("Netty [TCP] server listening {} on port {} and ready for connections...", ip, port);
 			} else {
 				log.error("Netty [TCP] server start up Error!");
@@ -121,7 +117,6 @@ public class TcpServerStarter extends AbstractServer {
 		}else {
 			log.info("TCP网络服务未在运行状态");
 		}
-		
 	}
 	
 

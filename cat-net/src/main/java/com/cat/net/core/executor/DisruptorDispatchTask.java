@@ -1,8 +1,9 @@
 package com.cat.net.core.executor;
 
-import com.cat.net.core.ControllerProcessor;
-import com.cat.net.core.base.GameSession;
-import com.cat.net.core.base.Packet;
+import com.cat.net.network.base.GameSession;
+import com.cat.net.network.base.Packet;
+import com.cat.net.network.process.ControllerProcessor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

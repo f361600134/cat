@@ -1,4 +1,4 @@
-package com.cat.net.network.bootstrap;
+package com.cat.net.server;
 
 /**
  * @Description  服务启动抽象层
@@ -34,8 +34,8 @@ public abstract class AbstractServer implements IServer {
 		this.port = port;
 	}
 	
-	protected void set(String ip, int port) {
-		this.ip = ip;
+	protected AbstractServer(int port) {
+		this.ip = "0.0.0.0";
 		this.port = port;
 	}
 

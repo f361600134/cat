@@ -29,6 +29,12 @@ public class NetConfig {
 	//websocket服务启用
 	@Value("${cat.network.connection.webscoketEnable}")
 	private boolean webscoketEnable;
+	//http端口
+	@Value("${cat.network.connection.httpPort}")
+	private int httpPort;
+	//http服务启用
+	@Value("${cat.network.connection.httpEnable}")
+	private boolean httpEnable;
 	
 	public String getServerIp() {
 		return serverIp;
@@ -60,5 +66,16 @@ public class NetConfig {
 	public void setWebscoketEnable(boolean webscoketEnable) {
 		this.webscoketEnable = webscoketEnable;
 	}
-	
+	public int getHttpPort() {
+		return httpPort;
+	}
+	public void setHttpPort(int httpPort) {
+		this.httpPort = httpPort;
+	}
+	public boolean isHttpEnable() {
+		return httpEnable;
+	}
+	public void setHttpEnable(boolean httpEnable) {
+		this.httpEnable = httpEnable;
+	}
 }

@@ -1,4 +1,4 @@
-package com.cat.net.core;
+package com.cat.net.network.process;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -11,11 +11,11 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.cat.net.core.annotation.Cmd;
-import com.cat.net.core.base.Commander;
-import com.cat.net.core.base.GameSession;
-import com.cat.net.core.base.IController;
-import com.cat.net.core.base.Packet;
+import com.cat.net.network.annotation.Cmd;
+import com.cat.net.network.base.Commander;
+import com.cat.net.network.base.GameSession;
+import com.cat.net.network.base.Packet;
+import com.cat.net.network.controller.IController;
 import com.cat.net.util.MessageOutput;
 import com.google.protobuf.GeneratedMessageLite;
 

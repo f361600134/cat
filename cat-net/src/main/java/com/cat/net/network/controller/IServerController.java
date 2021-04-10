@@ -1,9 +1,11 @@
-package com.cat.net.core.base;
+package com.cat.net.network.controller;
+
+import com.cat.net.network.base.GameSession;
 
 import io.netty.buffer.ByteBuf;
 
 /**
- * IServerController
+ * IServerController 系統接口
  */
 public interface IServerController {
 	

@@ -1,4 +1,4 @@
-package com.cat.net.network;
+package com.cat.net;
 
 import javax.annotation.PreDestroy;
 
@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.cat.net.common.NetConfig;
-import com.cat.net.core.base.IServerController;
-import com.cat.net.network.bootstrap.IServer;
+import com.cat.net.http.HttpServerStarter;
+import com.cat.net.http.controller.IRequestController;
+import com.cat.net.network.controller.IServerController;
 import com.cat.net.network.tcp.TcpServerStarter;
 import com.cat.net.network.websocket.WebSocketServerStarter;
+import com.cat.net.server.IServer;
 
 /**
  * 本地网络服务
@@ -25,11 +27,14 @@ public class LocalNetService implements InitializingBean{
 	@Autowired private NetConfig config;
 	
 	@Autowired private IServerController serverHandler;
+	@Autowired private IRequestController requestHandler;
 	
 	private IServer tcpServer;
 	private IServer websocketServer;
+	private IServer httpServer;
 	
-	public LocalNetService() {}
+	public LocalNetService() {
+	}
 	
 	/**
 	 * 启动
@@ -42,6 +47,9 @@ public class LocalNetService implements InitializingBean{
 		}
 		if (websocketServer != null) {
 			websocketServer.startServer();
+		}
+		if (httpServer != null) {
+			httpServer.startServer();
 		}
 	}
 	
@@ -57,39 +65,10 @@ public class LocalNetService implements InitializingBean{
 		if (websocketServer != null) {
 			websocketServer.stopServer();
 		}
+		if (httpServer != null) {
+			httpServer.stopServer();
+		}
 	}
-	
-//	private void prepareShutdownThread() {
-//		Runtime.getRuntime().addShutdownHook(new ShutdownTask());
-//	}
-//	
-//	
-//	class ShutdownTask extends Thread {
-//
-//		@Override
-//		public void run() {
-//			try {
-////				ServerHandler.this.serverStatus(false);
-////				PlayerManager pManager = PlayerManager.instance();
-////				pManager.kickAllPlayers();
-////				
-////				GameScheduler schd = GameContext.instance().getSched();
-////				schd.pauseJob(CommonJobStart.AUTO_SAVE_JOB_NAME);
-////				
-////				IData dataSync = GameContext.instance().gameData();
-////				Response resp0 = dataSync.executeBatchSave();
-////				Response resp1 = dataSync.executeBatchSave();
-//				
-////				if (resp0 != null) 
-////					resp0.sync(5000L);
-////				if (resp1 != null) 
-////					resp1.sync(5000L); 
-//			} catch (Exception e) {
-//				log.error("关服处理出现异常", e);
-//			}
-//		}
-//		
-//	}
 	
 	@PreDestroy
 	public void preDestroy() {
@@ -104,11 +83,12 @@ public class LocalNetService implements InitializingBean{
 	public void afterPropertiesSet() throws Exception {
 		if (config.isTcpEnable()) {
 			tcpServer = new TcpServerStarter(serverHandler, config.getServerIp(), config.getTcpPort());
-//			tcpServer.startServer();
 		}
 		if (config.isWebscoketEnable()){
 			websocketServer = new WebSocketServerStarter(serverHandler, config.getServerIp(), config.getWebscoketPort());
-//			websocketServer.startServer();
+		}
+		if (config.isHttpEnable()) {
+			httpServer = new HttpServerStarter(requestHandler, config.getServerIp(), config.getHttpPort());
 		}
 		startup();
 	}

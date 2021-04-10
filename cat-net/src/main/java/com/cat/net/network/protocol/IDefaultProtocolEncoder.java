@@ -1,6 +1,6 @@
 package com.cat.net.network.protocol;
 
-import com.cat.net.core.base.Packet;
+import com.cat.net.network.base.Packet;
 
 import io.netty.buffer.ByteBuf;
 

@@ -1,8 +1,9 @@
-package com.cat.net.core.base;
+package com.cat.net.network.base;
 
 import java.lang.reflect.Method;
 
 import com.cat.net.core.reflect.MethodInvoker;
+import com.cat.net.network.controller.IController;
 
 /**
  * 消息封装
@@ -11,16 +12,11 @@ import com.cat.net.core.reflect.MethodInvoker;
  */
 public class Commander {
 	
-//	private final IController controller;
-//	private final Method method;
-	
 	private final MethodInvoker invoker;
 	private final boolean mustLogin;
 	private final Method protobufParser;
 
 	public Commander(IController controller, boolean mustLogin, Method method) throws Exception {
-		//this.controller = controller;
-		//this.method = method;
 		this.invoker = MethodInvoker.create(controller, method);
 		this.mustLogin = mustLogin;
 		Class<?> paramType = method.getParameterTypes()[1];
@@ -39,13 +35,6 @@ public class Commander {
 	public MethodInvoker getInvoker() {
 		return invoker;
 	}
-//	public IController getController() {
-//		return controller;
-//	}
-//
-//	public Method getMethod() {
-//		return method;
-//	}
 
 	public Method getProtobufParser() {
 		return protobufParser;

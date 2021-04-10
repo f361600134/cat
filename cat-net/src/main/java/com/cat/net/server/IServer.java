@@ -1,4 +1,4 @@
-package com.cat.net.network.bootstrap;
+package com.cat.net.server;
 
 /**
  * @Description 服务器服务
@@ -16,4 +16,5 @@ public interface IServer {
 
   // 服务是否运行
   public boolean isRunning();
+  
 }
