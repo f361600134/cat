@@ -43,9 +43,9 @@ public class TcpServerStarter extends AbstractServer {
 	private EventLoopGroup bossGroup;
 	private EventLoopGroup workerGroup;
 
-	public TcpServerStarter() {
-		super();
-	}
+//	public TcpServerStarter() {
+//		super();
+//	}
 
 	public TcpServerStarter(IServerController serverHandler, String ip, int port) {
 		super(ip, port);

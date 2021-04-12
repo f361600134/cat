@@ -19,7 +19,7 @@ import com.cat.net.network.controller.IController;
 import com.cat.net.util.MessageOutput;
 import com.google.protobuf.GeneratedMessageLite;
 
-@Component
+//@Component
 public class ControllerProcessor implements InitializingBean{
 	
 	private static final Logger log = LoggerFactory.getLogger(ControllerProcessor.class);

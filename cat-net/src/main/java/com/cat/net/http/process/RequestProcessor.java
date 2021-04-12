@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.cat.net.http.annatation.RequestMapping;
@@ -19,6 +20,7 @@ import com.cat.net.http.base.Requester;
 import com.cat.net.util.ClassUtils;
 import com.cat.net.util.StringUtils;
 
+//@Component
 public class RequestProcessor implements InitializingBean{
 	
 	private static final Logger log = LoggerFactory.getLogger(RequestProcessor.class);

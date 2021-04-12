@@ -16,7 +16,7 @@ import io.netty.buffer.ByteBuf;
 /**
  * 默认游戏服分发处理器
  */
-@Component
+//@Component
 public class DefaultServerController implements IServerController {
 
 	private static final Logger log = LoggerFactory.getLogger(DefaultServerController.class);
@@ -27,7 +27,6 @@ public class DefaultServerController implements IServerController {
 	protected boolean serverRunning; // 服务器状态, true-运行中
 	
 	public DefaultServerController(){
-		log.info("注册[DefaultServerController]服务");
 	}
 
 	public void onConnect(GameSession session) {

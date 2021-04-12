@@ -1,12 +1,8 @@
 package com.cat.net;
 
-import javax.annotation.PreDestroy;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.cat.net.common.NetConfig;
 import com.cat.net.http.HttpServerStarter;
@@ -19,8 +15,8 @@ import com.cat.net.server.IServer;
 /**
  * 本地网络服务
  */
-@Component
-public class LocalNetService implements InitializingBean{
+//@Component
+public class LocalNetService {
 	
 	private static final Logger log = LoggerFactory.getLogger(LocalNetService.class);
 	
@@ -42,13 +38,17 @@ public class LocalNetService implements InitializingBean{
 	 * @throws Exception
 	 */
 	public void startup() throws Exception {
-		if (tcpServer != null) {
+		String ip = config.getServerIp();
+		if (config.getTcpPort() > 0) {
+			tcpServer = new TcpServerStarter(serverHandler, ip, config.getTcpPort());
 			tcpServer.startServer();
 		}
-		if (websocketServer != null) {
+		if (config.getWebscoketPort() > 0){
+			websocketServer = new WebSocketServerStarter(serverHandler, ip, config.getWebscoketPort());
 			websocketServer.startServer();
 		}
-		if (httpServer != null) {
+		if (config.getHttpPort() > 0) {
+			httpServer = new HttpServerStarter(requestHandler, ip, config.getHttpPort());
 			httpServer.startServer();
 		}
 	}
@@ -69,28 +69,4 @@ public class LocalNetService implements InitializingBean{
 			httpServer.stopServer();
 		}
 	}
-	
-	@PreDestroy
-	public void preDestroy() {
-		try {
-			shutdown();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		if (config.isTcpEnable()) {
-			tcpServer = new TcpServerStarter(serverHandler, config.getServerIp(), config.getTcpPort());
-		}
-		if (config.isWebscoketEnable()){
-			websocketServer = new WebSocketServerStarter(serverHandler, config.getServerIp(), config.getWebscoketPort());
-		}
-		if (config.isHttpEnable()) {
-			httpServer = new HttpServerStarter(requestHandler, config.getServerIp(), config.getHttpPort());
-		}
-		startup();
-	}
-
 }

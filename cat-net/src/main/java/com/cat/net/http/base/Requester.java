@@ -58,7 +58,6 @@ public class Requester {
 			}
 			this.methodParams.add(MethodParam.create(paramName, parameter.getType()));
 		}
-		System.out.println("methodParams:"+methodParams);
 	}
 	
 	/**

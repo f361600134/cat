@@ -21,20 +21,20 @@ public class NetConfig {
 	@Value("${cat.network.connection.tcpPort}")
 	private int tcpPort;
 	//tcp服务启用
-	@Value("${cat.network.connection.tcpEnable}")
-	private boolean tcpEnable;
+//	@Value("${cat.network.connection.tcpEnable}")
+//	private boolean tcpEnable;
 	//websocket端口
 	@Value("${cat.network.connection.webscoketPort}")
 	private int webscoketPort;
 	//websocket服务启用
-	@Value("${cat.network.connection.webscoketEnable}")
-	private boolean webscoketEnable;
+//	@Value("${cat.network.connection.webscoketEnable}")
+//	private boolean webscoketEnable;
 	//http端口
 	@Value("${cat.network.connection.httpPort}")
 	private int httpPort;
 	//http服务启用
-	@Value("${cat.network.connection.httpEnable}")
-	private boolean httpEnable;
+//	@Value("${cat.network.connection.httpEnable}")
+//	private boolean httpEnable;
 	
 	public String getServerIp() {
 		return serverIp;
@@ -54,28 +54,10 @@ public class NetConfig {
 	public void setWebscoketPort(int webscoketPort) {
 		this.webscoketPort = webscoketPort;
 	}
-	public boolean isTcpEnable() {
-		return tcpEnable;
-	}
-	public void setTcpEnable(boolean tcpEnable) {
-		this.tcpEnable = tcpEnable;
-	}
-	public boolean isWebscoketEnable() {
-		return webscoketEnable;
-	}
-	public void setWebscoketEnable(boolean webscoketEnable) {
-		this.webscoketEnable = webscoketEnable;
-	}
 	public int getHttpPort() {
 		return httpPort;
 	}
 	public void setHttpPort(int httpPort) {
 		this.httpPort = httpPort;
-	}
-	public boolean isHttpEnable() {
-		return httpEnable;
-	}
-	public void setHttpEnable(boolean httpEnable) {
-		this.httpEnable = httpEnable;
 	}
 }

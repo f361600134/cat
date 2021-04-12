@@ -49,9 +49,9 @@ public class WebSocketServerStarter extends AbstractServer {
 	private EventLoopGroup bossGroup;
 	private EventLoopGroup workerGroup;
 	
-	public WebSocketServerStarter () {
-		super();
-	}
+//	public WebSocketServerStarter () {
+//		super();
+//	}
 			
 	public WebSocketServerStarter (IServerController serverHandler, NetConfig config) {
 		super(config.getServerIp(), config.getTcpPort());

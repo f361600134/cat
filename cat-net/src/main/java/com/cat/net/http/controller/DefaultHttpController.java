@@ -36,7 +36,7 @@ import io.netty.util.CharsetUtil;
  * 
  * @author Jeremy
  */
-@Component
+//@Component
 public class DefaultHttpController implements IRequestController {
 
 	private static final Logger log = LoggerFactory.getLogger(DefaultHttpController.class);
