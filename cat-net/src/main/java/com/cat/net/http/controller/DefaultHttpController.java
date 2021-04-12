@@ -10,13 +10,14 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cat.net.http.HttpConstant;
 import com.cat.net.http.base.RequestInfo;
+import com.cat.net.http.base.Requester;
 import com.cat.net.http.process.RequestProcessor;
 
+import io.netty.handler.codec.TooLongFrameException;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpHeaderValues;
@@ -53,18 +54,22 @@ public class DefaultHttpController implements IRequestController {
 		}
 		URI uri = new URI(httpRequest.uri());
 		String url = uri.getPath();// 获取到请求uri
+		
+		Requester requester = processor.getRequester(url);
+		if (requester == null) {
+			sendError(httpResponse, HttpResponseStatus.NOT_FOUND);
+		}
 		Map<String, Object> paramMap = paramMap(httpRequest, httpResponse);
 		RequestInfo requestInfo = RequestInfo.create(url, paramMap);
 		try {
 			String ret = processor.invoke(requestInfo);
 			httpResponse.content().writeCharSequence(ret, CharsetUtil.UTF_8);
 		} catch (Exception e) {
-			;
-			httpResponse.content().writeCharSequence(HttpResponseStatus.BAD_REQUEST.toString(), CharsetUtil.UTF_8);
+			sendError(httpResponse, HttpResponseStatus.BAD_REQUEST);
 			log.error("DefaultHttpController error", e);
 		}
 	}
-
+	
 	/**
 	 * 解析参数
 	 * @param httpRequest
@@ -114,6 +119,37 @@ public class DefaultHttpController implements IRequestController {
 	@Override
 	public void serverStatus(boolean running) {
 		this.running = running;
+	}
+
+	/**
+	 * 发送错误消息
+	 * @param response
+	 * @param status
+	 */
+	private void sendError(FullHttpResponse response, HttpResponseStatus status) {
+		response.content().writeCharSequence(status.toString(), CharsetUtil.UTF_8);
+	}
+
+	@Override
+	public void onException(FullHttpResponse response, Throwable cause) {
+		if (cause instanceof TooLongFrameException) {
+			sendError(response, HttpResponseStatus.BAD_REQUEST);
+		} else if (cause instanceof IllegalArgumentException) {
+			sendError(response, HttpResponseStatus.NOT_FOUND);
+		}else {
+			sendError(response, HttpResponseStatus.INTERNAL_SERVER_ERROR);
+		}
+		log.error("DefaultHttpController onException...", cause);
+	}
+
+	@Override
+	public void onConnect(FullHttpResponse response) {
+		log.info("默认Http分发处理器连接接开始");
+	}
+
+	@Override
+	public void onClose(FullHttpResponse response) {
+		log.info("默认Http分发处理器连接接断开");
 	}
 
 }

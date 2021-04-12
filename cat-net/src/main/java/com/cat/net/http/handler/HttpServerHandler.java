@@ -5,13 +5,11 @@ import org.slf4j.LoggerFactory;
 
 import com.cat.net.http.controller.IRequestController;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.TooLongFrameException;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
@@ -20,8 +18,6 @@ import io.netty.handler.codec.http.HttpHeaderValues;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpUtil;
 import io.netty.handler.codec.http.HttpVersion;
-import io.netty.handler.codec.http.LastHttpContent;
-import io.netty.util.CharsetUtil;
 
 @Sharable
 public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
@@ -29,52 +25,32 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 	private static final Logger log = LoggerFactory.getLogger(HttpServerHandler.class);
 
 	private IRequestController controller;
+	
+	/**
+	 * 建立连接成功之后, 生成
+	 */
+	private FullHttpResponse response;
 
 	public HttpServerHandler(IRequestController controller) {
 		this.controller = controller;
-		log.info("============HttpServerHandler===========:{}", controller);
 	}
-
-	@Override
-	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		log.info("============channelActive===========");
-		super.channelActive(ctx);
-	}
-
-	@Override
-	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		log.info("============channelInactive===========");
-		super.channelInactive(ctx);
-	}
-
+	
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		if (cause instanceof TooLongFrameException) {
-			sendError(ctx, HttpResponseStatus.BAD_REQUEST);
-			return;
-		} else if (cause instanceof IllegalArgumentException) {
-			sendError(ctx, HttpResponseStatus.NOT_FOUND);
-			return;
+		if (this.response == null) {
+			this.response = createResponse();
 		}
-		if (ctx.channel().isActive()) {
-			sendError(ctx, HttpResponseStatus.INTERNAL_SERVER_ERROR);
-		}
+		controller.onException(response, cause);
 	}
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
-		log.info("============channelInactive===========");
-//		if (request.decoderResult() != DecoderResult.SUCCESS) {
-//			exceptionCaught(ctx, new IllegalArgumentException());
-//			return;
-//		}
-
-		FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
-		response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
-		response.headers().set(HttpHeaderNames.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-
+		log.info("============channelRead0===========");
+		if (!request.decoderResult().isSuccess()) {
+			exceptionCaught(ctx, new IllegalArgumentException());
+			return;
+		}
 		controller.onReceive(request, response);
-
 		boolean keepAlive = HttpUtil.isKeepAlive(request);
 		if (keepAlive) {
 			response.headers().setInt(HttpHeaderNames.CONTENT_LENGTH, response.content().readableBytes());
@@ -85,19 +61,27 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 	}
 	
 	/**
-	 * 错误时返回
-	 * @param ctx
-	 * @param status
+	 * 创建一个HttpResponse
+	 * @return
 	 */
-	private void sendError(ChannelHandlerContext ctx, HttpResponseStatus status) {
-		ByteBuf buffer = ctx.alloc().buffer(100);
-		buffer.writeBytes(("Failure: " + status.toString() + "\r\n").getBytes(CharsetUtil.UTF_8));
-		DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
-				buffer);
-		response.headers().set("Content-Type", "text/html; charset=UTF-8");
-		response.headers().set("Content-Length", buffer.readableBytes());
-		ctx.channel().write(response).addListener(ChannelFutureListener.CLOSE);
-		ctx.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
+	private FullHttpResponse createResponse() {
+		FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
+		response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
+		response.headers().set(HttpHeaderNames.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+		return response;
+	}
+	
+	@Override
+	public void channelActive(ChannelHandlerContext ctx) throws Exception {
+		log.info("===============channelActive===================={}", controller);
+		this.response = createResponse();
+		controller.onConnect(this.response);
 	}
 
+	@Override
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		log.info("===============channelInactive===================={}", controller);
+		controller.onClose(this.response);
+	}
+	
 }

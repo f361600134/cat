@@ -122,4 +122,9 @@ public class RequestProcessor implements InitializingBean{
 		return ret;
 	}
 	
+	
+	public Requester getRequester(String url){
+		return requesterMap.get(url);
+	}
+	
 }

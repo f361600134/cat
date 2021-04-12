@@ -8,14 +8,14 @@ import io.netty.handler.codec.http.FullHttpResponse;
  */
 public interface IRequestController {
 	
-//	void onConnect(GameSession session);
+	void onConnect(FullHttpResponse response);
 
 	void onReceive(FullHttpRequest httpRequest, FullHttpResponse response) throws Exception;
 
-//	void onClose(GameSession session);
-//
-//	void onException(GameSession session, Throwable e);
-//	
+	void onClose(FullHttpResponse response);
+
+	void onException(FullHttpResponse response, Throwable e);
+	
 	void serverStatus(boolean running);
 	
 }
