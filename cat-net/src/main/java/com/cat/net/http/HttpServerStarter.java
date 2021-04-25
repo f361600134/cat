@@ -19,6 +19,11 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 
+/**
+ * 	致敬摇摆标, 虽然代码不是摇摆标写的, 但是这部分思路是摇摆标框架吸收到的,
+ * @author yaobaibiao
+ *
+ */
 public class HttpServerStarter extends AbstractServer{
 	
 	private static final Logger log = LoggerFactory.getLogger(HttpServerStarter.class);
@@ -37,11 +42,11 @@ public class HttpServerStarter extends AbstractServer{
 		this.controller = controller;
 	}
 	
-	public HttpServerStarter(IRequestController controller, String ip,int port) {
+	public HttpServerStarter(IRequestController controller, String ip, int port) {
 		super(ip, port);
 		this.controller = controller;
 	}
-
+	
 	@Override
 	public boolean startServer() throws Exception {
 		ChannelFuture future = null;
@@ -94,5 +99,5 @@ public class HttpServerStarter extends AbstractServer{
 			log.info("HTTP网络服务未在运行状态");
 		}
 	}
-
+	
 }

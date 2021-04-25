@@ -5,14 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 数据库POJO, SQL映射
- * 默认缓存单表操作,批量操作数据动态生成
- * 此方法仅只能生成单表操作的数据, 不能生成批量操作数据,
+ * 数据库POJO, SQL映射 默认缓存单表操作,批量操作数据动态生成 此方法仅只能生成单表操作的数据, 不能生成批量操作数据,
  */
 public class PoMapper<T extends BasePo> {
 	private static final Logger log = LoggerFactory.getLogger(PoMapper.class);
 
-	//	真正的class类
+	// 真正的class类
 	private Class<T> realCls;
 	private String tbName;
 	private String selectAll;
@@ -23,9 +21,10 @@ public class PoMapper<T extends BasePo> {
 	private String update;
 	private String insert;
 	private String replace;
-	
+
 	/**
 	 * 默认生成sql缓存
+	 * 
 	 * @date 2020年6月22日
 	 * @param cls
 	 */
@@ -37,7 +36,7 @@ public class PoMapper<T extends BasePo> {
 			log.error("BasePo对象反射出错:{}", cls, e);
 		}
 	}
-	
+
 	private void initSql() throws InstantiationException, IllegalAccessException {
 		PO po = realCls.getAnnotation(PO.class);
 		if (po == null) {
@@ -56,7 +55,7 @@ public class PoMapper<T extends BasePo> {
 		this.replace = SQLGenerator.replace(tbName, ins.props());
 	}
 
-	public Class<T>getRealCls() {
+	public Class<T> getRealCls() {
 		return realCls;
 	}
 
@@ -95,5 +94,5 @@ public class PoMapper<T extends BasePo> {
 	public String getReplace() {
 		return replace;
 	}
-	
+
 }

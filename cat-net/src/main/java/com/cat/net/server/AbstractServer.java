@@ -38,5 +38,5 @@ public abstract class AbstractServer implements IServer {
 		this.ip = "0.0.0.0";
 		this.port = port;
 	}
-
+	
 }
