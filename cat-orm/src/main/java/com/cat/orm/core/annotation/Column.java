@@ -12,4 +12,7 @@ public @interface Column {
 	/**Column name*/
 	String value() default "";
 	
+	/**Column 反序列化类型*/
+	Class<?> clazzType() default Object.class;
+	
 }

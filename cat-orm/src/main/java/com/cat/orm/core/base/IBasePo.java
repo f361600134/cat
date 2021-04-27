@@ -19,7 +19,7 @@ public interface IBasePo {
 	
 	/**
 	 * 缓存二级ID
-	 * 用于缓存的主键,  indexs()组合
+	 * 用于缓存的主键,  indexColumn()组合
 	 * 直接用indexValues的组合生成最终的key
 	 * 生成规则: key = indexVal1 +":"+ indexVal2 + ":"+...+ indexValn
 	 * @return
