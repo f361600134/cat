@@ -52,7 +52,7 @@ public class ControllerProcessor implements InitializingBean{
 				commanderMap.put(cmd.id(), Commander.create(controller, cmd.mustLogin(), method));
 			}
 		}
-		log.info("The initialization message is complete and takes [{}] milliseconds.", (System.currentTimeMillis() - startTime));
+		log.info("The initialization message[{}] is complete and takes [{}] milliseconds.", commanderMap.size(),(System.currentTimeMillis() - startTime));
 	}
 	
 	/**
