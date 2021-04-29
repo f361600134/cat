@@ -15,22 +15,22 @@ import org.springframework.context.annotation.Configuration;
 public class NetConfig {
 	
 	//服务器ip
-	@Value("${cat.network.connection.serverIp}")
+	@Value("${cat.network.connection.serverIp:}")
 	private String serverIp;
 	//tcp端口
-	@Value("${cat.network.connection.tcpPort}")
+	@Value("${cat.network.connection.tcpPort:0}")
 	private int tcpPort;
 	//tcp服务启用
 //	@Value("${cat.network.connection.tcpEnable}")
 //	private boolean tcpEnable;
 	//websocket端口
-	@Value("${cat.network.connection.webscoketPort}")
+	@Value("${cat.network.connection.webscoketPort:0}")
 	private int webscoketPort;
 	//websocket服务启用
 //	@Value("${cat.network.connection.webscoketEnable}")
 //	private boolean webscoketEnable;
 	//http端口
-	@Value("${cat.network.connection.httpPort}")
+	@Value("${cat.network.connection.httpPort:0}")
 	private int httpPort;
 	//http服务启用
 //	@Value("${cat.network.connection.httpEnable}")
