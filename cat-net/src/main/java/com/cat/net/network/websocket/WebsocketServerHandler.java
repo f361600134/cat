@@ -2,11 +2,11 @@ package com.cat.net.network.websocket;
 
 import java.io.IOException;
 
-import com.cat.net.network.base.GameSession;
-import com.cat.net.network.controller.IServerController;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.cat.net.network.base.GameSession;
+import com.cat.net.network.controller.IServerController;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

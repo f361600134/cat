@@ -2,11 +2,11 @@ package com.cat.net.network.tcp;
 
 import java.io.IOException;
 
-import com.cat.net.network.base.GameSession;
-import com.cat.net.network.controller.IServerController;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.cat.net.network.base.GameSession;
+import com.cat.net.network.controller.IServerController;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -26,20 +26,20 @@ public class TcpServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 	private IServerController serverHandler;
 
 	public TcpServerHandler(IServerController serverHandler) {
-		log.info("===============TcpServerHandler====================");
+//		log.info("===============TcpServerHandler====================");
 		this.serverHandler = serverHandler;
 	}
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		log.info("===============channelActive====================");
+//		log.info("===============channelActive====================");
 		session = GameSession.create(ctx.channel()); // 新建session
 		serverHandler.onConnect(session);
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		log.info("===============channelInactive====================");
+//		log.info("===============channelInactive====================");
 		serverHandler.onClose(session);
 	}
 
@@ -55,7 +55,7 @@ public class TcpServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-		log.info("===============channelRead0====================:{}", msg);
+//		log.info("===============channelRead0====================:{}", msg);
 		serverHandler.onReceive(session, msg);
 	}
 

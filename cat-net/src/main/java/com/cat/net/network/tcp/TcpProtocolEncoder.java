@@ -1,9 +1,10 @@
 package com.cat.net.network.tcp;
 
-import com.cat.net.network.base.Packet;
-import com.cat.net.network.protocol.IDefaultProtocolEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.cat.net.network.base.Packet;
+import com.cat.net.network.protocol.IDefaultProtocolEncoder;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -26,28 +27,5 @@ public class TcpProtocolEncoder extends MessageToByteEncoder<Packet> implements 
 		}	
 		log.info("TcpProtocolEncoder out:{}", out);
 	}
-
-//	public void codec(Packet msg, ByteBuf outBuffer) {
-//		if (msg == null || outBuffer == null) {
-//			throw new IllegalArgumentException("codec error, data is null or outBuffer");
-//        }
-//		int protocolLen = Packet.PROTO_LEN;
-//		int protocol = msg.cmd();
-//        switch (protocolLen) {//写入长度
-//        case 1:
-//        	outBuffer.writeByte((byte) protocol);
-//            break;
-//        case 2:
-//            outBuffer.writeShort((short) protocol);
-//            break;
-//        case 4:
-//            outBuffer.writeInt(protocol);
-//            break;
-//        default:
-//            throw new Error("should not reach here");
-//        }
-//        //写入内容
-//        outBuffer.writeBytes(msg.data());
-//	}
 
 }

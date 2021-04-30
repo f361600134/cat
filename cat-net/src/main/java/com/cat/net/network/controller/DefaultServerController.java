@@ -3,13 +3,12 @@ package com.cat.net.network.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.cat.net.core.executor.DisruptorStrategy;
 import com.cat.net.network.base.Commander;
 import com.cat.net.network.base.GameSession;
 import com.cat.net.network.base.Packet;
-import com.cat.net.network.process.ControllerProcessor;
+import com.cat.net.network.process.ControllerDispatcher;
 
 import io.netty.buffer.ByteBuf;
 
@@ -22,7 +21,7 @@ public class DefaultServerController implements IServerController {
 	private static final Logger log = LoggerFactory.getLogger(DefaultServerController.class);
 
 	@Autowired
-	protected ControllerProcessor processor;
+	protected ControllerDispatcher processor;
 
 	protected boolean serverRunning; // 服务器状态, true-运行中
 	

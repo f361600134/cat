@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.cat.net.network.annotation.Cmd;
 import com.cat.net.network.base.Commander;
@@ -20,9 +19,9 @@ import com.cat.net.util.MessageOutput;
 import com.google.protobuf.GeneratedMessageLite;
 
 //@Component
-public class ControllerProcessor implements InitializingBean{
+public class ControllerDispatcher implements InitializingBean{
 	
-	private static final Logger log = LoggerFactory.getLogger(ControllerProcessor.class);
+	private static final Logger log = LoggerFactory.getLogger(ControllerDispatcher.class);
 	
 	@Autowired
 	private List<IController> handlerList;

@@ -1,5 +1,7 @@
 package com.cat.net.util.convert;
 
+import com.cat.net.util.EnumUtils;
+
 /**
  * 枚举取值方式
  * @author meiyc
