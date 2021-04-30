@@ -44,6 +44,10 @@ public class GameSession {
 		this.ip = ipAndPort[0];
 		this.port = Integer.parseInt(ipAndPort[1]);
 	}
+	
+	public void setPlayerId(long playerId) {
+		this.playerId = playerId;
+	}
 
 	public long getPlayerId() {
 		return playerId;
