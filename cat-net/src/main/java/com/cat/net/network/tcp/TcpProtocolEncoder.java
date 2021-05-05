@@ -25,7 +25,7 @@ public class TcpProtocolEncoder extends MessageToByteEncoder<Packet> implements 
 		}else {
 			ReferenceCountUtil.retain(msg);
 		}	
-		log.info("TcpProtocolEncoder out:{}", out);
+		//log.info("TcpProtocolEncoder out:{}", out);
 	}
 
 }

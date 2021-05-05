@@ -81,7 +81,6 @@ public class GameSession {
 		Packet data = Packet.encode(protocol);
 		if (isConnect()) {
 			channel.writeAndFlush(data);
-			log.info("========push========:{}", data);
 		}
 	}
 	
