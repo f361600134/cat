@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface Cmd {
 	
-	int id();
+	int value();
 	
 	boolean mustLogin() default true;
 }

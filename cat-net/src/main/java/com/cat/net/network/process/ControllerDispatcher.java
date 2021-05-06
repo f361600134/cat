@@ -44,11 +44,11 @@ public class ControllerDispatcher implements InitializingBean{
 				Cmd cmd = method.getAnnotation(Cmd.class);
 				if (cmd == null) continue;
 				//检查重复协议号
-				if (commanderMap.containsKey(cmd.id())) {
+				if (commanderMap.containsKey(cmd.value())) {
 					//log.error("协议号[{}]重复, 请检查!!!", cmd.id());
-					throw new RuntimeException("发现重复协议号:"+cmd.id());
+					throw new RuntimeException("发现重复协议号:"+cmd.value());
 				}
-				commanderMap.put(cmd.id(), Commander.create(controller, cmd.mustLogin(), method));
+				commanderMap.put(cmd.value(), Commander.create(controller, cmd.mustLogin(), method));
 			}
 		}
 		log.info("The initialization message[{}] is complete and takes [{}] milliseconds.", commanderMap.size(),(System.currentTimeMillis() - startTime));
