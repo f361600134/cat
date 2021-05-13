@@ -5,12 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 数据库POJO, SQL映射 默认缓存单表操作,批量操作数据动态生成 此方法仅只能生成单表操作的数据, 不能生成批量操作数据,
+ * 数据库POJO, SQL映射 默认缓存单表操作,批量操作数据动态生成 此方法仅只能生成单表操作的数据, 不能生成批量操作数据
+ * @author Jeremy
  */
 public class PoMapper<T extends BasePo> {
 	private static final Logger log = LoggerFactory.getLogger(PoMapper.class);
 
-	// 真正的class类
 	private Class<T> realCls;
 	private String tbName;
 	private String selectAll;
@@ -24,7 +24,6 @@ public class PoMapper<T extends BasePo> {
 
 	/**
 	 * 默认生成sql缓存
-	 * 
 	 * @date 2020年6月22日
 	 * @param cls
 	 */
@@ -49,8 +48,8 @@ public class PoMapper<T extends BasePo> {
 		this.deleteAll = SQLGenerator.deleteAll(tbName);
 		this.selectByIndex = SQLGenerator.select(tbName, ins.indexColumn());
 		this.selectByKey = SQLGenerator.select(tbName, ins.keyColumn());
-		this.delete = SQLGenerator.delete(tbName, ins.indexColumn());
-		this.update = SQLGenerator.update(tbName, ins.props(), ins.indexColumn());
+		this.delete = SQLGenerator.delete(tbName, ins.keyAndIndexColumn());
+		this.update = SQLGenerator.update(tbName, ins.props(), ins.keyAndIndexColumn());
 		this.insert = SQLGenerator.insert(tbName, ins.props());
 		this.replace = SQLGenerator.replace(tbName, ins.props());
 	}

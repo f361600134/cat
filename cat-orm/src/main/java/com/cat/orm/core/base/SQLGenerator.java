@@ -15,12 +15,15 @@ public class SQLGenerator {
 	}
 
 	/**
-	 * 根据主键, 索引查询.
+	 * 根据主键, 索引查询. 索引可以为空, 为空不能进行默认的索引查询
 	 * @param tbName
 	 * @param idNames
 	 * @return
 	 */
 	public static String select(String tbName, String ...idNames){
+		if (idNames.length == 0){
+			return null;
+		}
 		StringBuilder sb = new StringBuilder("SELECT * FROM `").append(tbName).append("` WHERE ");
 		sb.append(idNames[0]).append("=?");
 		for (int i = 1; i < idNames.length; i++) {

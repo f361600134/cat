@@ -25,6 +25,7 @@ public abstract class BasePo implements IBasePo, Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	public String poName() {
 		return this.getClass().getSimpleName();
 	}
@@ -32,6 +33,7 @@ public abstract class BasePo implements IBasePo, Serializable {
 	/**
 	 * 存储前操作, 这个操作因为是异步执行, 会引发线程安全问题, 只能放在玩家线程去执行.
 	 */
+	@Override
 	public void beforeSave() {
 		Class<?> cls = getClass();
 		Class<?> superCls = cls.getSuperclass();
@@ -73,6 +75,7 @@ public abstract class BasePo implements IBasePo, Serializable {
 	/**
 	 * 加载后操作
 	 */
+	@Override
 	public void afterLoad() {
 		Class<?> clazz = this.getClass();
 		Class<?> superClazz = clazz.getSuperclass();

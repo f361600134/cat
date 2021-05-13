@@ -103,7 +103,7 @@ public class CommonDao<T extends BasePo> implements IDao<T>{
 		final String sql = poMapper.getUpdate();
 		log.debug("update sql:{}", sql);
 		Object[] props = po.propValues();
-		Object[] ids = po.indexValues();
+		Object[] ids = po.keyAndIndexValues();
 		Object[] objects = new Object[props.length + ids.length];
 		System.arraycopy(props, 0, objects, 0, props.length);
 		System.arraycopy(ids, 0, objects, props.length, ids.length);
@@ -115,7 +115,7 @@ public class CommonDao<T extends BasePo> implements IDao<T>{
 	 */
 	public int delete(T po) {
 		final String sql = poMapper.getDelete();
-		final Object[] indexsValue = po.indexValues();
+		final Object[] indexsValue = po.keyAndIndexValues();
 		log.debug("delete sql:{}, idValues:{}", sql, indexsValue);
 		return jdbcTemplate.update(sql, indexsValue);
 	}
@@ -149,7 +149,7 @@ public class CommonDao<T extends BasePo> implements IDao<T>{
 		final String sql = poMapper.getDelete();
 		List<Object[]> calValues = new ArrayList<Object[]>();
 		for (T basePo : basePos) {
-			calValues.add(basePo.indexValues());
+			calValues.add(basePo.keyAndIndexValues());
 		}
 		log.debug("deleteBatch sql:{}", sql);
 		return jdbcTemplate.batchUpdate(sql, calValues);
