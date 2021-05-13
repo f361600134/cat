@@ -3,13 +3,10 @@ package com.cat.orm.common;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
-//import org.springframework.boot.context.properties.ConfigurationProperties;
-
 /**
  * 缓存配置
  * @author Jeremy
  * @date 2020年6月29日
- *
  */
 @Configuration
 public class OrmConfig {

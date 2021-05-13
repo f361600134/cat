@@ -35,6 +35,7 @@ public class ControllerDispatcher implements InitializingBean{
 	/**
 	 * 加载完成后, 初始化handler
 	 */
+	@Override
 	public void afterPropertiesSet() throws Exception {
 		long startTime = System.currentTimeMillis();
 		commanderMap = new HashMap<Integer, Commander>();
@@ -42,7 +43,9 @@ public class ControllerDispatcher implements InitializingBean{
 			Method[] methods = controller.getClass().getDeclaredMethods();
 			for (Method method : methods) {
 				Cmd cmd = method.getAnnotation(Cmd.class);
-				if (cmd == null) continue;
+				if (cmd == null) {
+					continue;
+				}
 				//检查重复协议号
 				if (commanderMap.containsKey(cmd.value())) {
 					//log.error("协议号[{}]重复, 请检查!!!", cmd.id());
@@ -58,9 +61,7 @@ public class ControllerDispatcher implements InitializingBean{
 	 * 协议调用
 	 * 
 	 * @param session	玩家会话信息
-	 * @param cmd		协议号
-	 * @param bytes		协议体
-	 * @throws Exception
+	 * @param packet	包体
 	 */
 	public void invoke(GameSession session, Packet packet) throws Exception {
 		int cmd = packet.cmd();
@@ -71,7 +72,7 @@ public class ControllerDispatcher implements InitializingBean{
 			byte[] bytes = packet.data();
 			
 			Method parser = commander.getProtobufParser();
-			GeneratedMessageLite<?, ?> params = (GeneratedMessageLite<?, ?>) parser.invoke(null, bytes);
+			GeneratedMessageLite<?, ?> params = (GeneratedMessageLite<?, ?>) parser.invoke(null, (Object) bytes);
 			
 			log.debug("收到协议[{}], pid={}, params={}, size={}B",
 					cmd, session.getPlayerId(), MessageOutput.create(params), bytes.length);
