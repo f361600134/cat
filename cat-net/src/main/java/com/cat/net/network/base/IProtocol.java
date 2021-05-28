@@ -9,7 +9,7 @@ import com.google.protobuf.AbstractMessageLite.Builder;
  */
 public interface IProtocol {
 	
-	short protocol();
+	int protocol();
 	
 	default byte[] toBytes() {
 		return getBuilder().build().toByteArray();

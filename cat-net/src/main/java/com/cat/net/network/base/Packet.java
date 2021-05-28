@@ -9,12 +9,12 @@ import io.netty.buffer.ByteBuf;
 public class Packet {
 	
 	/** 协议长度 */
-	public static final int PROTO_LEN = 2;
+	public static final int PROTO_LEN = 4;
 	
-	private final short cmd;
+	private final int cmd;
 	private final byte[] data;
 
-	public Packet(short cmd, byte[] data) {
+	public Packet(int cmd, byte[] data) {
 		this.cmd = cmd;
 		this.data = data;
 	}
@@ -35,7 +35,7 @@ public class Packet {
 	}
 	
 	public static Packet encode(IProtocol protocol) {
-		short cmd = protocol.protocol();
+		int cmd = protocol.protocol();
 		byte[] data = protocol.toBytes();
 		return new Packet(cmd, data);
 	}
