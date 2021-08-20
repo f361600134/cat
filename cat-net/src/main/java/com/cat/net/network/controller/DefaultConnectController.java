@@ -6,37 +6,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cat.net.core.executor.DisruptorStrategy;
 import com.cat.net.network.base.Commander;
-import com.cat.net.network.base.GameSession;
+import com.cat.net.network.base.ISession;
 import com.cat.net.network.base.Packet;
 import com.cat.net.network.process.ControllerDispatcher;
 
 import io.netty.buffer.ByteBuf;
 
 /**
- * 默认游戏服分发处理器
+ * 默认协议分发处理器,  开发人员使用时注册.
  */
-//@Component
-public class DefaultServerController implements IServerController {
+public class DefaultConnectController implements IConnectController {
 
-	private static final Logger log = LoggerFactory.getLogger(DefaultServerController.class);
+	private static final Logger log = LoggerFactory.getLogger(DefaultConnectController.class);
 
 	@Autowired
 	protected ControllerDispatcher processor;
 
 	protected boolean serverRunning; // 服务器状态, true-运行中
 	
-	public DefaultServerController(){
+	public DefaultConnectController(){
 	}
 
-	public void onConnect(GameSession session) {
-		log.info("默认分发处理器, 客户端连接游戏服:{}", session.getChannel().remoteAddress());
+	public void onConnect(ISession session) {
+		log.info("默认分发处理器, 客户端连接服务:{}", session.getChannel().remoteAddress());
 	}
 
-	public void onReceive(GameSession session, ByteBuf message) {
+	@Autowired
+	public void onReceive(ISession session, ByteBuf message) {
 		int cmd = 0;
 		try {
 			if (!serverRunning) {
-				log.error("默认分发处理器, 服务器不在运行状态, 舍弃消息");
+				log.error("默认分发处理器, 服务不在运行状态, 舍弃消息");
 				return;
 			}
 			final Packet packet = Packet.decode(message);
@@ -54,7 +54,7 @@ public class DefaultServerController implements IServerController {
 			//	添加到任务队列
 //			DisruptorDispatchTask task = new DisruptorDispatchTask(processor, session, packet);
 //			DisruptorStrategy.get(DisruptorStrategy.SINGLE).execute(session.getId(), task);
-			DisruptorStrategy.get(DisruptorStrategy.SINGLE).execute(session.getId(), ()->{
+			DisruptorStrategy.get(DisruptorStrategy.SINGLE).execute(session.getSessionId(), ()->{
 				try {
 					processor.invoke(session, packet);
 					log.info("====> DisruptorDispatchTask run, threadName:{}", Thread.currentThread().getName());
@@ -70,13 +70,13 @@ public class DefaultServerController implements IServerController {
 	}
 
 	@Override
-	public void onClose(GameSession session) {
+	public void onClose(ISession session) {
 		log.info("默认分发处理器, 客户端连接断开:{}", session.getChannel().remoteAddress());
 	}
 
 	@Override
-	public void onException(GameSession session, Throwable e) {
-		log.error("默认分发处理器, 游戏协议通信过程出错", e);
+	public void onException(ISession session, Throwable e) {
+		log.error("默认分发处理器, 协议通信过程出错", e);
 	}
 
 	@Override

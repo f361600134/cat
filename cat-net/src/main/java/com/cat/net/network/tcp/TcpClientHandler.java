@@ -19,14 +19,14 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * 2. 一条连接对应一个GameSession
  * 3. 所有TcpServerHandler持有的IServerHandler都是同一个引用
  */
-public class TcpServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
+public class TcpClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
-	private static final Logger log = LoggerFactory.getLogger(TcpServerHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(TcpClientHandler.class);
 
 	private ISession session;
 	private IConnectController serverHandler;
 
-	public TcpServerHandler(IConnectController serverHandler) {
+	public TcpClientHandler(IConnectController serverHandler) {
 //		log.info("===============TcpServerHandler====================");
 		this.serverHandler = serverHandler;
 	}

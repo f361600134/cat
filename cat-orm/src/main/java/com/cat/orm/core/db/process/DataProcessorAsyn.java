@@ -35,6 +35,9 @@ public class DataProcessorAsyn extends DataProcessor {
 
 	private static final Logger log = LoggerFactory.getLogger(DataProcessorAsyn.class);
 
+	/**
+	 * 这里的线程池,目前使用单线程处理, 如果压力过大, 后期可以个改成基于actor的多线程定时处理.
+	 */
 	private ScheduledExecutorService executor;
 	private Queue<Task> queue;
 

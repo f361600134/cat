@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.cat.net.common.NetConfig;
 import com.cat.net.http.HttpServerStarter;
 import com.cat.net.http.controller.IRequestController;
-import com.cat.net.network.controller.IServerController;
+import com.cat.net.network.controller.IConnectController;
 import com.cat.net.network.tcp.TcpServerStarter;
 import com.cat.net.network.websocket.WebSocketServerStarter;
-import com.cat.net.server.IServer;
+import com.cat.net.terminal.IServer;
 
 /**
  * 本地网络服务
@@ -22,7 +22,7 @@ public class LocalNetService {
 	
 	@Autowired private NetConfig config;
 	
-	@Autowired private IServerController serverHandler;
+	@Autowired private IConnectController serverHandler;
 	@Autowired private IRequestController requestHandler;
 	
 	private IServer tcpServer;

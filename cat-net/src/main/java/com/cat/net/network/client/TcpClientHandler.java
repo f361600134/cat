@@ -1,4 +1,4 @@
-package com.cat.net.network.tcp;
+package com.cat.net.network.client;
 
 import java.io.IOException;
 
@@ -15,33 +15,33 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 /**
  * 游戏服务器消息处理器 注意: 
- * 1. 一条连接对应一个TcpServerHandler 
- * 2. 一条连接对应一个GameSession
- * 3. 所有TcpServerHandler持有的IServerHandler都是同一个引用
+ * 1. 一条连接对应一个TcpClientHandler 
+ * 2. 一条连接对应一个session
+ * 3. 所有TcpClientHandler持有的IConnectController都是同一个引用
  */
-public class TcpServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
+public class TcpClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
-	private static final Logger log = LoggerFactory.getLogger(TcpServerHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(TcpClientHandler.class);
 
 	private ISession session;
-	private IConnectController serverHandler;
+	private IConnectController handler;
 
-	public TcpServerHandler(IConnectController serverHandler) {
-//		log.info("===============TcpServerHandler====================");
-		this.serverHandler = serverHandler;
+	public TcpClientHandler(IConnectController clientHandler) {
+		log.info("===============TcpClientHandler====================");
+		this.handler = clientHandler;
 	}
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-//		log.info("===============channelActive====================");
+		log.info("===============TcpClientHandler-channelActive====================");
 		session = DefaultSession.create(ctx.channel()); // 新建session
-		serverHandler.onConnect(session);
+		handler.onConnect(session);
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-//		log.info("===============channelInactive====================");
-		serverHandler.onClose(session);
+		log.info("===============TcpClientHandler-channelInactive====================");
+		handler.onClose(session);
 	}
 
 	@Override
@@ -50,14 +50,14 @@ public class TcpServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 			return;
 		} else {
 			cause.printStackTrace();
-			serverHandler.onException(session, cause);
+			handler.onException(session, cause);
 		}
 	}
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-//		log.info("===============channelRead0====================:{}", msg);
-		serverHandler.onReceive(session, msg);
+		log.info("===============TcpClientHandler-channelRead0====================:{}", msg);
+		handler.onReceive(session, msg);
 	}
 
 }

@@ -1,7 +1,8 @@
-package com.cat.net.server;
+package com.cat.net.terminal;
 
 /**
- * @Description 服务器服务
+ * @Description 服务器端服务接口
+ * @author Jeremy
  */
 public interface IServer {
 	

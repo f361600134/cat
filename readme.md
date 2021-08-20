@@ -20,4 +20,7 @@ Wechat: huuzii
 
 
 
+# 修改日志 20210821
+1.新增ISession接口, 用于网络层网络会话.修改会话实现类,GameSession改为DefaultSession,会话连接变得更加纯粹,没有耦合游戏业务.
+2.新增Netty实现的客户端.用于支持s2s通讯
 

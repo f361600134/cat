@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cat.net.network.annotation.Cmd;
 import com.cat.net.network.base.Commander;
-import com.cat.net.network.base.GameSession;
+import com.cat.net.network.base.ISession;
 import com.cat.net.network.base.Packet;
 import com.cat.net.network.controller.IController;
 import com.cat.net.util.MessageOutput;
@@ -63,23 +63,20 @@ public class ControllerDispatcher implements InitializingBean{
 	 * @param session	玩家会话信息
 	 * @param packet	包体
 	 */
-	public void invoke(GameSession session, Packet packet) throws Exception {
+	public void invoke(ISession session, Packet packet) throws Exception {
 		int cmd = packet.cmd();
 		Commander commander = commanderMap.get(cmd);
 		if (commander != null) {
 			long begin = System.currentTimeMillis();
-
 			byte[] bytes = packet.data();
 			
 			Method parser = commander.getProtobufParser();
 			GeneratedMessageLite<?, ?> params = (GeneratedMessageLite<?, ?>) parser.invoke(null, (Object) bytes);
 			
 			log.debug("收到协议[{}], pid={}, params={}, size={}B",
-					cmd, session.getPlayerId(), MessageOutput.create(params), bytes.length);
-
+						cmd, session.getUserData(), MessageOutput.create(params), bytes.length);
 			//commander.getMethod().invoke(commander.getController(), session, params);
 			commander.getInvoker().invoke(session, params);
-
 			long used = System.currentTimeMillis() - begin;
 			// 协议处理超过1秒
 			if (used > 1000) {

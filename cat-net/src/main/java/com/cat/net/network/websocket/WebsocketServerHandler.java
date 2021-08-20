@@ -5,8 +5,9 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cat.net.network.base.GameSession;
-import com.cat.net.network.controller.IServerController;
+import com.cat.net.network.base.DefaultSession;
+import com.cat.net.network.base.ISession;
+import com.cat.net.network.controller.IConnectController;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -43,17 +44,17 @@ public class WebsocketServerHandler extends SimpleChannelInboundHandler<Object> 
 	// 处理握手
 	private WebSocketServerHandshaker handshaker;
 
-	private GameSession session;
-	private IServerController serverHandler;
+	private ISession session;
+	private IConnectController serverHandler;
 
-	public WebsocketServerHandler(IServerController serverHandler) {
+	public WebsocketServerHandler(IConnectController serverHandler) {
 		this.serverHandler = serverHandler;
 	}
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		log.info("============channelActive=============");
-		session = GameSession.create(ctx.channel()); // 新建session
+		session = DefaultSession.create(ctx.channel()); // 新建session
 		serverHandler.onConnect(session);
 	}
 
@@ -128,7 +129,7 @@ public class WebsocketServerHandler extends SimpleChannelInboundHandler<Object> 
 		// 心跳信息
 		if (frame instanceof PingWebSocketFrame) {
 			Channel channel = ctx.channel();
-			log.info("channel[{}], 用户[{}],websocket心跳请求", channel, session.getPlayerId());
+			log.info("channel[{}], 用户[{}],websocket心跳请求", channel, session.getUserData());
 			ctx.write(new PongWebSocketFrame(frame.content().retain()));
 			return;
 		}
