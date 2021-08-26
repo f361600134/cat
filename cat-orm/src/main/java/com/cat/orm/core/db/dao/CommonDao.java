@@ -12,29 +12,29 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-public class CommonDao<T extends BasePo> implements IDao<T>{
-	
+public class CommonDao<T extends BasePo> implements IDao<T> {
+
 	private static final Logger log = LoggerFactory.getLogger(CommonDao.class);
-	
+
 	/**
-	 * 	基于spring提供的JdbcTemplate实现.
-	 *	仅仅需要关注业务本身 不需要关注事务,连接释放等操作
+	 * 基于spring提供的JdbcTemplate实现. 仅仅需要关注业务本身 不需要关注事务,连接释放等操作
 	 */
 	private final JdbcTemplate jdbcTemplate;
-	
+
 	/**
 	 * po.sql映射, 对注册的POJO生成sql隐射,操作时直接通过映射的sql进行操作
 	 */
 	private final PoMapper<T> poMapper;
-	
+
 	public CommonDao(Class<T> clazz, JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 		this.poMapper = new PoMapper<>(clazz);
 	}
-	
+
 	/**
 	 * 查询所有
-	* @see com.cat.orm.core.db.dao.IDao#selectAll()
+	 * 
+	 * @see com.cat.orm.core.db.dao.IDao#selectAll()
 	 */
 	@Override
 	public Collection<T> selectAll() {
@@ -44,9 +44,10 @@ public class CommonDao<T extends BasePo> implements IDao<T>{
 		List<T> basePoList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<T>(clazz));
 		return basePoList;
 	}
-	
+
 	/**
 	 * 根据索引查询, 需要组装
+	 * 
 	 * @date 2020年6月29日
 	 * @return
 	 */
@@ -54,7 +55,7 @@ public class CommonDao<T extends BasePo> implements IDao<T>{
 	public T selectByKey(Object value) {
 		final String sql = poMapper.getSelectByKey();
 		final Class<T> clazz = poMapper.getRealCls();
-		
+
 		log.debug("select sql:{}, objs:{}, cls:{}", sql, value, clazz);
 		List<T> basePoList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<T>(clazz), value);
 		if (basePoList.size() > 1) {
@@ -64,25 +65,25 @@ public class CommonDao<T extends BasePo> implements IDao<T>{
 			return null;
 		}
 		T t = basePoList.get(0);
-		return  t;
+		return t;
 	}
 
 	/**
-	* 通过默认主键, 索引进行查询
-	* 不需要指定主键和索引, 默认通过所有索引进行查询
+	 * 通过默认主键, 索引进行查询 不需要指定主键和索引, 默认通过所有索引进行查询
 	 */
 	@Override
 	public Collection<T> selectByIndex(Object[] value) {
 		final String sql = poMapper.getSelectByIndex();
 		final Class<T> clazz = poMapper.getRealCls();
-		
+
 		log.debug("select sql:{}, cls:{}", sql, clazz);
 		Collection<T> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper<T>(clazz), value);
 		return list;
 	}
-	
+
 	/**
 	 * 入库
+	 * 
 	 * @date 2020年6月29日
 	 * @param po
 	 * @return
@@ -128,7 +129,7 @@ public class CommonDao<T extends BasePo> implements IDao<T>{
 		log.debug("deleteAll sql:{}", sql);
 		return jdbcTemplate.update(sql);
 	}
-	
+
 	/**
 	 * 批量添加
 	 */
@@ -157,10 +158,10 @@ public class CommonDao<T extends BasePo> implements IDao<T>{
 
 	/**
 	 * 通过指定的主键, 值进行查询, 自动生成
-	 * @param props 索引字段
-	 * @param values 查询值
-	 * 	比如:select * from player where playerId = 1
-	 * selectByIndex(new String[]{"playerId"}, new Object[]{1})
+	 * 
+	 * @param props  索引字段
+	 * @param values 查询值 比如:select * from player where playerId = 1
+	 *               selectByIndex(new String[]{"playerId"}, new Object[]{1})
 	 */
 	@Override
 	public Collection<T> selectByIndex(String[] props, Object[] values) {
@@ -172,11 +173,11 @@ public class CommonDao<T extends BasePo> implements IDao<T>{
 	}
 
 	/**
-	 * 通过sql语句查询,在以上所有语句不能处理业务时, 使用此方法.
-	 * 因为默认sql不缓存, 所以效率比以上操作相比略低.
+	 * 通过sql语句查询,在以上所有语句不能处理业务时, 使用此方法. 因为默认sql不缓存, 所以效率比以上操作相比略低.
+	 * 
 	 * @param obj
-	 * @return  
-	 * @return BasePo  
+	 * @return
+	 * @return BasePo
 	 * @date 2020年9月7日下午4:53:28
 	 */
 	@Override
@@ -184,5 +185,5 @@ public class CommonDao<T extends BasePo> implements IDao<T>{
 		final Class<T> clazz = poMapper.getRealCls();
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<T>(clazz));
 	}
-	
+
 }

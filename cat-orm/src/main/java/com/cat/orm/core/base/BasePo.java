@@ -17,7 +17,7 @@ import com.alibaba.fastjson.JSONObject;
  * 基础持久化对象父类
  */
 public abstract class BasePo implements IBasePo, Serializable {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(BasePo.class);
 
 	/**
@@ -91,9 +91,9 @@ public abstract class BasePo implements IBasePo, Serializable {
 			if (columnName == null || columnName.equals("")) {
 				continue;
 			}
-			//	如果是接口类, 不支持接口类的反序列化
+			// 如果是接口类, 不支持接口类的反序列化
 			if (Modifier.isInterface(field.getModifiers())) {
-				throw new UnsupportedOperationException("Can not Deserialization, field:"+field.getName());
+				throw new UnsupportedOperationException("Can not Deserialization, field:" + field.getName());
 			}
 			// 通过定义的columnName,反射获取到字段,设置内容
 			try {

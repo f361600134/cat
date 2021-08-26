@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 数据库POJO, SQL映射 默认缓存单表操作,批量操作数据动态生成 此方法仅只能生成单表操作的数据, 不能生成批量操作数据
+ * 
  * @author Jeremy
  */
 public class PoMapper<T extends BasePo> {
@@ -24,6 +25,7 @@ public class PoMapper<T extends BasePo> {
 
 	/**
 	 * 默认生成sql缓存
+	 * 
 	 * @date 2020年6月22日
 	 * @param cls
 	 */
