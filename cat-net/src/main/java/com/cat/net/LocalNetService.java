@@ -1,5 +1,9 @@
 package com.cat.net;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,4 +73,13 @@ public class LocalNetService {
 			httpServer.stopServer();
 		}
 	}
+	
+//    public static void main(String[] args) {
+//        Map<String, String> map = new HashMap<>();
+//        map.put("aaa", "aaa");
+//        map.put("bbb", "bbb");
+//        map.put("ccc", "ccc");
+//        Set<String> list = map.keySet();
+//        System.out.println("====>"+list.get(0));
+//    }
 }

@@ -17,4 +17,19 @@ public interface IProtocol {
 	
 	Builder<?, ?> getBuilder();
 	
+	/**
+     * 序号
+     * 
+     * @return
+     */
+    default int getSeq() {
+    	return 0;
+    }
+
+    /**
+     * 
+     * @param seq
+     */
+    default void setSeq(int seq) {}
+	
 }

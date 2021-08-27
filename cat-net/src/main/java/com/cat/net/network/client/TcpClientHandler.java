@@ -1,6 +1,10 @@
 package com.cat.net.network.client;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +62,22 @@ public class TcpClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
 		log.info("===============TcpClientHandler-channelRead0====================:{}", msg);
 		handler.onReceive(session, msg);
+	}
+	
+	/**
+	 * 返回连接会话
+	 * @return
+	 */
+	public ISession getSession() {
+		return session;
+	}
+	
+	/**
+	 * 返回连接会话
+	 * @return
+	 */
+	public IConnectController getHandler() {
+		return handler;
 	}
 
 }
