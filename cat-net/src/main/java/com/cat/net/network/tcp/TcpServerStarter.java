@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cat.net.network.bootstrap.IdleDetectionHandler;
-import com.cat.net.network.controller.IConnectController;
+import com.cat.net.network.controller.IControllerDispatcher;
 import com.cat.net.terminal.AbstractServer;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -33,7 +33,7 @@ public class TcpServerStarter extends AbstractServer {
 
 	private static final Logger log = LoggerFactory.getLogger(TcpServerStarter.class);
 
-	private IConnectController serverHandler;
+	private IControllerDispatcher serverHandler;
 
 	/**
 	 * NioEventLoop并不是一个纯粹的I/O线程，它除了负责I/O的读写之外 创建了两个NioEventLoopGroup，
@@ -47,7 +47,7 @@ public class TcpServerStarter extends AbstractServer {
 //		super();
 //	}
 
-	public TcpServerStarter(IConnectController serverHandler, String ip, int port) {
+	public TcpServerStarter(IControllerDispatcher serverHandler, String ip, int port) {
 		super(ip, port);
 		this.serverHandler = serverHandler;
 	}

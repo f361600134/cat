@@ -5,9 +5,9 @@ import com.cat.net.network.base.ISession;
 import io.netty.buffer.ByteBuf;
 
 /**
- * IConnectController 系統接口
+ * Dispatcher 系統接口
  */
-public interface IConnectController {
+public interface IControllerDispatcher {
 	
 	void onConnect(ISession session);
 

@@ -1,5 +1,9 @@
 package com.cat.net.network.base;
 
+/**
+ * 协议抽象类, 封装序列号
+ * @author Jeremy
+ */
 public abstract class AbstractProtocol implements IProtocol{
 
 	 /**

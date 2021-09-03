@@ -11,11 +11,22 @@ public class Packet {
 	/** 协议长度 */
 	public static final int PROTO_LEN = 4;
 	
+	/**
+	 * 消息号
+	 */
 	private final int cmd;
+	/**
+	 * 序列号
+	 */
+	private final int seq;
+	/**
+	 * 数据
+	 */
 	private final byte[] data;
 
-	public Packet(int cmd, byte[] data) {
+	public Packet(int cmd, int seq, byte[] data) {
 		this.cmd = cmd;
+		this.seq = seq;
 		this.data = data;
 	}
 	
@@ -23,21 +34,27 @@ public class Packet {
 		return cmd;
 	}
 	
+	public int seq() {
+		return seq;
+	}
+	
 	public byte[] data() {
 		return data;
 	}
 	
 	public static Packet decode(ByteBuf byteBuf) {
-		short cmd = byteBuf.readShort();
+		int cmd = byteBuf.readInt();
+		int seq = byteBuf.readInt();
 		byte[] newdata = new byte[byteBuf.readableBytes()];
 		byteBuf.readBytes(newdata);
-		return new Packet(cmd, newdata);
+		return new Packet(cmd, seq, newdata);
 	}
 	
 	public static Packet encode(IProtocol protocol) {
 		int cmd = protocol.protocol();
+		int seq = protocol.getSeq();
 		byte[] data = protocol.toBytes();
-		return new Packet(cmd, data);
+		return new Packet(cmd, seq, data);
 	}
 	
 }	

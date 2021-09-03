@@ -15,7 +15,7 @@ public abstract class AbstractClient implements IClient{
 	protected String ip;
 	
 	/**端口*/
-    private int port;
+	protected int port;
     
    	/** 运行状态 */
    	protected boolean runState;

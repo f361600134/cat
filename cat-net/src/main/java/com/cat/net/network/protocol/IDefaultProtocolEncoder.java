@@ -25,6 +25,8 @@ public interface IDefaultProtocolEncoder {
         default:
             throw new Error("should not reach here");
         }
+        //写入序列号
+        outBuffer.writeInt(msg.seq());
         //写入内容
         outBuffer.writeBytes(msg.data());
 	}

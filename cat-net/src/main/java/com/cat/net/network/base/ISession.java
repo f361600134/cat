@@ -73,9 +73,10 @@ public interface ISession {
 	 */
 	default public void push(IProtocol protocol) {
 		Packet data = Packet.encode(protocol);
-		if (isConnect()) {
-			getChannel().writeAndFlush(data);
-		}
+//		if (isConnect()) {
+//			getChannel().writeAndFlush(data);
+//		}
+		send(data);
 	}
 	
 	/**

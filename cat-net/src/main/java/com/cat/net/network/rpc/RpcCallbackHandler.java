@@ -1,8 +1,8 @@
 package com.cat.net.network.rpc;
 
-import com.cat.net.network.base.IProtocol;
+import com.google.protobuf.AbstractMessageLite;
 
-public class RpcCallbackHandler<T extends IProtocol> extends AbstractRpcCallback<T> {
+public class RpcCallbackHandler<T extends AbstractMessageLite<?, ?>> extends AbstractRpcCallback<T> {
 
     private IResponseCallback<T> callback;
 

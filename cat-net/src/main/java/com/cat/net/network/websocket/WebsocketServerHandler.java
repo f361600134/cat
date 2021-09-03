@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.cat.net.network.base.DefaultSession;
 import com.cat.net.network.base.ISession;
-import com.cat.net.network.controller.IConnectController;
+import com.cat.net.network.controller.IControllerDispatcher;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -45,9 +45,9 @@ public class WebsocketServerHandler extends SimpleChannelInboundHandler<Object> 
 	private WebSocketServerHandshaker handshaker;
 
 	private ISession session;
-	private IConnectController serverHandler;
+	private IControllerDispatcher serverHandler;
 
-	public WebsocketServerHandler(IConnectController serverHandler) {
+	public WebsocketServerHandler(IControllerDispatcher serverHandler) {
 		this.serverHandler = serverHandler;
 	}
 

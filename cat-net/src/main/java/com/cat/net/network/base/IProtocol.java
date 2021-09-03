@@ -22,14 +22,12 @@ public interface IProtocol {
      * 
      * @return
      */
-    default int getSeq() {
-    	return 0;
-    }
+    int getSeq();
 
     /**
      * 
      * @param seq
      */
-    default void setSeq(int seq) {}
+    void setSeq(int seq);
 	
 }

@@ -7,7 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import com.cat.net.exception.RpcInvalidConnectException;
 import com.cat.net.network.base.IProtocol;
-import com.cat.net.network.controller.IConnectController;
+import com.cat.net.network.base.ISession;
+import com.cat.net.network.controller.IControllerDispatcher;
 import com.cat.net.network.rpc.IResponseCallback;
 import com.cat.net.network.rpc.RpcCallbackCache;
 import com.cat.net.network.rpc.RpcCallbackHandler;
@@ -15,7 +16,7 @@ import com.cat.net.network.rpc.RpcCallbackHandler;
 /**
  * @author Jeremy
  */
-public class RpcClientStarter extends TcpClientStarter{
+public class RpcClientStarter extends TcpClientStarter {
 	
 	private static final Logger log = LoggerFactory.getLogger(TcpClientHandler.class);
 	
@@ -29,10 +30,10 @@ public class RpcClientStarter extends TcpClientStarter{
      */
     protected final RpcCallbackCache callbackCache = new RpcCallbackCache();
 	
-    public RpcClientStarter(IConnectController handler, int id, String nodeType, String ip, int port) {
+    public RpcClientStarter(IControllerDispatcher handler, int id, String nodeType, String ip, int port) {
 		super(handler, id, nodeType, ip, port);
 	}
-
+    
 	protected int generateSeq() {
         int seq = seqGenerator.incrementAndGet();
         if (seq >= 0) {
@@ -47,7 +48,7 @@ public class RpcClientStarter extends TcpClientStarter{
 	 * 请求调用
 	 * @param <R>
 	 */
-	public <R extends IProtocol> void ask(IProtocol request, long timeout, IResponseCallback<R> callback) {
+	public void ask(IProtocol request, long timeout, IResponseCallback<?> callback) {
 		if (callback == null) {
 			sendMessage(request);
             return;
@@ -60,11 +61,29 @@ public class RpcClientStarter extends TcpClientStarter{
 		request.setSeq(seq);
 		long now = System.currentTimeMillis();
 		long expiredTime = now + timeout;
-		RpcCallbackHandler<R> futureCallback = new RpcCallbackHandler<>(seq, expiredTime, callback);
+		RpcCallbackHandler<?> futureCallback = new RpcCallbackHandler<>(seq, expiredTime, callback);
 		//回调方法加入缓存
 		callbackCache.addCallback(futureCallback);
 		//发送消息
 		sendMessage(request);
 	}
 	
+	public RpcCallbackCache getCallbackCache() {
+		return callbackCache;
+	}
+	
+	public void afterConnect() {
+		if (clientHandler == null) {
+			log.info("clientHandler is null");
+			return;
+		}
+		ISession session = clientHandler.getSession();
+		if (session == null) {
+			log.info("session is null");
+			return;
+		}
+		log.info("===========> 连接成功");
+		session.setUserData(this);
+	}
+
 }

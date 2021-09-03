@@ -1,9 +1,5 @@
 package com.cat.net;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.cat.net.common.NetConfig;
 import com.cat.net.http.HttpServerStarter;
 import com.cat.net.http.controller.IRequestController;
-import com.cat.net.network.controller.IConnectController;
+import com.cat.net.network.controller.DefaultConnectControllerDispatcher;
 import com.cat.net.network.tcp.TcpServerStarter;
 import com.cat.net.network.websocket.WebSocketServerStarter;
 import com.cat.net.terminal.IServer;
@@ -26,7 +22,7 @@ public class LocalNetService {
 	
 	@Autowired private NetConfig config;
 	
-	@Autowired private IConnectController serverHandler;
+	@Autowired private DefaultConnectControllerDispatcher serverHandler;
 	@Autowired private IRequestController requestHandler;
 	
 	private IServer tcpServer;
@@ -46,6 +42,7 @@ public class LocalNetService {
 		if (config.getTcpPort() > 0) {
 			tcpServer = new TcpServerStarter(serverHandler, ip, config.getTcpPort());
 			tcpServer.startServer();
+			//tcpServer = DefaultServerFactory.INSTANCE.newChooser(TcpServerStarter.class);
 		}
 		if (config.getWebscoketPort() > 0){
 			websocketServer = new WebSocketServerStarter(serverHandler, ip, config.getWebscoketPort());

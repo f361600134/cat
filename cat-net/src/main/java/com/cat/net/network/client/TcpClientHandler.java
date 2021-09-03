@@ -1,17 +1,13 @@
 package com.cat.net.network.client;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cat.net.network.base.DefaultSession;
 import com.cat.net.network.base.ISession;
-import com.cat.net.network.controller.IConnectController;
+import com.cat.net.network.controller.IControllerDispatcher;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -28,9 +24,9 @@ public class TcpClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 	private static final Logger log = LoggerFactory.getLogger(TcpClientHandler.class);
 
 	private ISession session;
-	private IConnectController handler;
+	private IControllerDispatcher handler;
 
-	public TcpClientHandler(IConnectController clientHandler) {
+	public TcpClientHandler(IControllerDispatcher clientHandler) {
 		log.info("===============TcpClientHandler====================");
 		this.handler = clientHandler;
 	}
@@ -76,7 +72,7 @@ public class TcpClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 	 * 返回连接会话
 	 * @return
 	 */
-	public IConnectController getHandler() {
+	public IControllerDispatcher getHandler() {
 		return handler;
 	}
 

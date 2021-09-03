@@ -34,12 +34,12 @@ public interface IClient {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean connect() throws Exception;
+	public boolean connect();
 
 	/**
 	 * 友好的断开连接,不可以接收请求,把当前请求完成后,断开连接.
 	 */
-	public void disConnect() throws Exception;
+	public void disConnect() ;
 
 	/**
 	 * 立刻关闭客户端连接
@@ -67,7 +67,7 @@ public interface IClient {
 	 * @return
 	 */
 	public boolean isRunning();
-
+	
 	/**
 	 * 接收响应消息
 	 */

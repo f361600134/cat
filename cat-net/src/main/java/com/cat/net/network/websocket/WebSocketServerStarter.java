@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.cat.net.common.NetConfig;
 import com.cat.net.network.bootstrap.IdleDetectionHandler;
-import com.cat.net.network.controller.IConnectController;
+import com.cat.net.network.controller.IControllerDispatcher;
 import com.cat.net.terminal.AbstractServer;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -37,7 +37,7 @@ public class WebSocketServerStarter extends AbstractServer {
 
 	private static final Logger log = LoggerFactory.getLogger(WebSocketServerStarter.class);
 
-	private IConnectController serverHandler;
+	private IControllerDispatcher serverHandler;
 
 	 /**
      * NioEventLoop并不是一个纯粹的I/O线程，它除了负责I/O的读写之外
@@ -53,12 +53,12 @@ public class WebSocketServerStarter extends AbstractServer {
 //		super();
 //	}
 			
-	public WebSocketServerStarter (IConnectController serverHandler, NetConfig config) {
+	public WebSocketServerStarter (IControllerDispatcher serverHandler, NetConfig config) {
 		super(config.getServerIp(), config.getTcpPort());
 		this.serverHandler = serverHandler;
 	}
 	
-	public WebSocketServerStarter (IConnectController serverHandler, String ip, int port) {
+	public WebSocketServerStarter (IControllerDispatcher serverHandler, String ip, int port) {
 		super(ip, port);
 		this.serverHandler = serverHandler;
 	}

@@ -7,13 +7,13 @@ import org.slf4j.LoggerFactory;
 
 import com.cat.net.network.base.IProtocol;
 import com.cat.net.network.base.ISession;
+import com.cat.net.network.base.Packet;
 import com.cat.net.network.bootstrap.IdleDetectionHandler;
-import com.cat.net.network.controller.IConnectController;
+import com.cat.net.network.controller.IControllerDispatcher;
 import com.cat.net.network.tcp.TcpProtocolEncoder;
 import com.cat.net.terminal.AbstractClient;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -37,49 +37,38 @@ public class TcpClientStarter extends AbstractClient{
 	/**
 	 * clientHandler, 会话session, IConnectController 
 	 */
-    private TcpClientHandler clientHandler;
+    protected TcpClientHandler clientHandler;
     
-    public TcpClientStarter(IConnectController handler, int id, String nodeType, String ip, int port) {
+    public TcpClientStarter(IControllerDispatcher handler, int id, String nodeType, String ip, int port) {
 		super(id, nodeType, ip, port);
 		this.clientHandler = new TcpClientHandler(handler);
 	}
 
 	@Override
-	public boolean connect() throws Exception {
-		 group = new NioEventLoopGroup(1, new DefaultThreadFactory("TCP_CLIENT_BOSS"));
-		 try {
-			Bootstrap bootstrap = new Bootstrap();
-            bootstrap.group(group) // 注册线程池
-                    .channel(NioSocketChannel.class) // 使用NioSocketChannel来作为连接用的channel类
-                    .remoteAddress(new InetSocketAddress(this.getIp(), this.getPort())) // 绑定连接端口和host信息
-                    .handler(new ChannelInitializer<SocketChannel>() { // 绑定连接初始化器
-                        @Override
-                        protected void initChannel(SocketChannel ch) throws Exception {
-                        	ch.pipeline().addLast(new TcpProtocolEncoder());
-                            //ch.pipeline().addLast(new EchoClientHandler());
-                        	ch.pipeline().addLast("idleDetection", new IdleDetectionHandler());
-							// inbound
-                        	ch.pipeline().addLast("lengthDecoder", new LengthFieldBasedFrameDecoder(8 * 1024, 0, 4, 0, 4));
-//        							pipeline.addLast(new FixedLengthFrameDecoder(frameLength));
-                        	ch.pipeline().addLast("clientHandler", clientHandler);
-							// outbound
-                        	ch.pipeline().addLast("lengthEncoder", new LengthFieldPrepender(4));
-                        	ch.pipeline().addLast("protocolEncoder", new TcpProtocolEncoder());
-                        }
-                    });
-
-            ChannelFuture cf = bootstrap.connect().sync(); // 异步连接服务器
-            cf.channel().closeFuture().sync(); // 异步等待关闭连接channel
-        } finally {
-            group.shutdownGracefully().sync(); // 释放线程池资源
-        }
-		return false;
+	public boolean connect() {
+		Thread thread = new Thread(()->{
+			try {
+				//客户端连接服务端, 建立channel后会被阻塞,直到服务端断开连接.这里开一个线程去处理
+				doConnect();
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.error("Connect to server error, host:{}, port:{}", this.getIp(), this.getPort());
+			}
+		});
+		thread.start();
+		return true;
+//		try {
+//			return doConnect();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return false;
+//		}
 	}
 
 	@Override
-	public void disConnect() throws Exception {
+	public void disConnect() {
 		if (isRunning()) {
-			clientHandler.getHandler().serverStatus(false);// 关掉连接
+			this.clientHandler.getHandler().serverStatus(false);// 关掉连接
 			if (group != null) {
 				group.shutdownGracefully();
 			}
@@ -97,7 +86,46 @@ public class TcpClientStarter extends AbstractClient{
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	/**
+	 * 实际连接操作
+	 */
+	private boolean doConnect() throws Exception {
+		 group = new NioEventLoopGroup(1, new DefaultThreadFactory("TCP_CLIENT_BOSS"));
+		 try {
+			Bootstrap bootstrap = new Bootstrap();
+            bootstrap.group(group) // 注册线程池
+                    .channel(NioSocketChannel.class) // 使用NioSocketChannel来作为连接用的channel类
+                    .remoteAddress(new InetSocketAddress(this.getIp(), this.getPort())) // 绑定连接端口和host信息
+                    .handler(new ChannelInitializer<SocketChannel>() { // 绑定连接初始化器
+                        @Override
+                        protected void initChannel(SocketChannel ch) throws Exception {
+//                        	ch.pipeline().addLast(new TcpProtocolEncoder());
+                            //ch.pipeline().addLast(new EchoClientHandler());
+                        	ch.pipeline().addLast("idleDetection", new IdleDetectionHandler());
+							// inbound
+                        	ch.pipeline().addLast("lengthDecoder", new LengthFieldBasedFrameDecoder(8 * 1024, 0, 4, 0, 4));
+//        							pipeline.addLast(new FixedLengthFrameDecoder(frameLength));
+                        	ch.pipeline().addLast("clientHandler", clientHandler);
+							// outbound
+                        	ch.pipeline().addLast("lengthEncoder", new LengthFieldPrepender(4));
+                        	ch.pipeline().addLast("protocolEncoder", new TcpProtocolEncoder());
+                        }
+                    });
+            this.clientHandler.getHandler().serverStatus(true);
+//            ChannelFuture cf = bootstrap.connect().sync(); // 异步连接服务器
+//            // 成功连接到端口之后,给channel增加一个 管道关闭的监听器并同步阻塞,直到channel关闭,线程才会往下执行,结束线程
+//            cf.channel().closeFuture().sync(); // 异步等待关闭连接channel
+            bootstrap.connect(this.getIp(), this.getPort()).sync().channel();
+            return true;
+        } catch (Exception e) {
+        	log.info("error", e);
+        	return false;
+		}finally {
+           //group.shutdownGracefully().sync(); // 释放线程池资源
+        }
+	}
+	
 	@Override
 	public boolean isActive() {
 		if (isRunning()) {
@@ -118,7 +146,7 @@ public class TcpClientStarter extends AbstractClient{
 	}
 	
 	@Override
-	public void sendMessage(IProtocol message) {
+	public void sendMessage(IProtocol protocol) {
 		if (isRunning()) {
 			return;
 		}
@@ -127,12 +155,13 @@ public class TcpClientStarter extends AbstractClient{
 			log.info("没有创建会话, 不能发送消息");
 			return;
 		}
-		session.send(message);
+		//session.send(message);
+		session.send(Packet.encode(protocol));
 	}
 	
 	@Override
 	public void receiveResponse(IProtocol message) {
 		
 	}
-
+	
 }

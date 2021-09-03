@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DisruptorExecutorGroup {
 	
-	private static final Logger log = LoggerFactory.getLogger(DisruptorDispatchTask.class);
+	private static final Logger log = LoggerFactory.getLogger(DisruptorExecutorGroup.class);
 	
 	private final AtomicInteger childIndex = new AtomicInteger();
 	private DisruptorExecutor[] children;

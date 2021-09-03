@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.cat.net.network.base.DefaultSession;
 import com.cat.net.network.base.ISession;
-import com.cat.net.network.controller.IConnectController;
+import com.cat.net.network.controller.IControllerDispatcher;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -24,23 +24,23 @@ public class TcpServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 	private static final Logger log = LoggerFactory.getLogger(TcpServerHandler.class);
 
 	private ISession session;
-	private IConnectController serverHandler;
+	private IControllerDispatcher serverHandler;
 
-	public TcpServerHandler(IConnectController serverHandler) {
-//		log.info("===============TcpServerHandler====================");
+	public TcpServerHandler(IControllerDispatcher serverHandler) {
+		log.info("===============TcpServerHandler====================");
 		this.serverHandler = serverHandler;
 	}
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-//		log.info("===============channelActive====================");
+		log.info("===============channelActive====================");
 		session = DefaultSession.create(ctx.channel()); // 新建session
 		serverHandler.onConnect(session);
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-//		log.info("===============channelInactive====================");
+		log.info("===============channelInactive====================");
 		serverHandler.onClose(session);
 	}
 
@@ -56,7 +56,7 @@ public class TcpServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-//		log.info("===============channelRead0====================:{}", msg);
+		log.info("===============channelRead0====================:{}", msg);
 		serverHandler.onReceive(session, msg);
 	}
 
