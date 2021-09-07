@@ -46,12 +46,17 @@ public abstract class AbstractControllerDispatcher<T> implements IControllerDisp
 		}
 		Packet packet = Packet.decode(message);
 		int cmd = packet.cmd();
+		if (cmd < 0) {//视为内部消息号,忽略
+			log.info("Received inner message, cmd:[{}]", cmd);
+			return;
+		}
 		T commander = mapper.get(cmd);
 		if (commander == null) {
 			log.info("收到未处理协议, cmd=[{}]", cmd);
 			return;
 		}
 		if (!checkInvoke(session, commander)) {
+			log.info("协议验证不通过, 拒绝处理, cmd:[{}]", cmd);
 			return;
 		}
 		//	添加到任务队列
@@ -80,10 +85,13 @@ public abstract class AbstractControllerDispatcher<T> implements IControllerDisp
 	 */
 	public abstract void invoke(ISession session, T commander, Packet packet) throws Exception;
 	
-
 	@Override
 	public void serverStatus(boolean running) {
 		this.serverRunning = running;
+	}
+	
+	public Map<Integer, T> getMapper() {
+		return mapper;
 	}
 
 }

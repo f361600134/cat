@@ -16,9 +16,14 @@ import com.cat.net.network.rpc.RpcCallbackHandler;
 /**
  * @author Jeremy
  */
-public class RpcClientStarter extends TcpClientStarter {
+public class RpcClientStarter extends TcpClientStarter implements IClientState{
 	
 	private static final Logger log = LoggerFactory.getLogger(TcpClientHandler.class);
+	
+	/**
+	 * 活跃状态, 声明周期状态
+	 */
+	protected int state;
 	
 	/**
      * 协议序号生成器<br>
@@ -29,7 +34,7 @@ public class RpcClientStarter extends TcpClientStarter {
      * rpc回调缓存
      */
     protected final RpcCallbackCache callbackCache = new RpcCallbackCache();
-	
+    
     public RpcClientStarter(IControllerDispatcher handler, int id, String nodeType, String ip, int port) {
 		super(handler, id, nodeType, ip, port);
 	}
@@ -84,6 +89,24 @@ public class RpcClientStarter extends TcpClientStarter {
 		}
 		log.info("===========> 连接成功");
 		session.setUserData(this);
+	}
+
+	@Override
+	public boolean compareAndSet(int expectState, int newState) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setState(int newState) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getState() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

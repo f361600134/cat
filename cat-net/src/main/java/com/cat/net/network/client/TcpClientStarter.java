@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import com.cat.net.network.base.IProtocol;
 import com.cat.net.network.base.ISession;
 import com.cat.net.network.base.Packet;
-import com.cat.net.network.bootstrap.IdleDetectionHandler;
 import com.cat.net.network.controller.IControllerDispatcher;
 import com.cat.net.network.tcp.TcpProtocolEncoder;
 import com.cat.net.terminal.AbstractClient;
@@ -21,6 +20,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
 
 /**
@@ -46,6 +46,15 @@ public class TcpClientStarter extends AbstractClient{
 
 	@Override
 	public boolean connect() {
+		try {
+			return doConnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean connectAsyn() {
 		Thread thread = new Thread(()->{
 			try {
 				//客户端连接服务端, 建立channel后会被阻塞,直到服务端断开连接.这里开一个线程去处理
@@ -57,12 +66,6 @@ public class TcpClientStarter extends AbstractClient{
 		});
 		thread.start();
 		return true;
-//		try {
-//			return doConnect();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return false;
-//		}
 	}
 
 	@Override
@@ -102,7 +105,9 @@ public class TcpClientStarter extends AbstractClient{
                         protected void initChannel(SocketChannel ch) throws Exception {
 //                        	ch.pipeline().addLast(new TcpProtocolEncoder());
                             //ch.pipeline().addLast(new EchoClientHandler());
-                        	ch.pipeline().addLast("idleDetection", new IdleDetectionHandler());
+                        	
+                        	ch.pipeline().addLast("idleState", new IdleStateHandler(0, 0, 30));
+//                        	ch.pipeline().addLast("idleDetection", new CustomeHeartbeatHandler());
 							// inbound
                         	ch.pipeline().addLast("lengthDecoder", new LengthFieldBasedFrameDecoder(8 * 1024, 0, 4, 0, 4));
 //        							pipeline.addLast(new FixedLengthFrameDecoder(frameLength));

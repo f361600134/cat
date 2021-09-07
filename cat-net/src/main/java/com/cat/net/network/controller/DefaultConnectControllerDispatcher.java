@@ -4,9 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.cat.net.exception.RepeatProtoException;
 import com.cat.net.network.annotation.Cmd;
 import com.cat.net.network.base.Commander;
@@ -20,8 +17,6 @@ import com.google.protobuf.AbstractMessageLite;
  */
 public class DefaultConnectControllerDispatcher extends AbstractControllerDispatcher<Commander> {
 
-	private static final Logger log = LoggerFactory.getLogger(DefaultConnectControllerDispatcher.class);
-	
 	/**
 	 * 初始化
 	 * @param controllers 消息处理接口列表
@@ -44,6 +39,7 @@ public class DefaultConnectControllerDispatcher extends AbstractControllerDispat
 				mapper.put(cmd.value(), Commander.create(controller, cmd.mustLogin(), method));
 			}
 		}
+		log.info("====>{}",mapper.keySet());
 		log.info("The initialization message[{}] is complete and takes [{}] milliseconds.", mapper.size(),(System.currentTimeMillis() - startTime));
 	}
 	

@@ -12,6 +12,7 @@ import com.cat.net.network.controller.IControllerDispatcher;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.util.ReferenceCountUtil;
 
 /**
  * 游戏服务器消息处理器 注意: 
@@ -53,10 +54,10 @@ public class TcpServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 			serverHandler.onException(session, cause);
 		}
 	}
-
+	
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-		log.info("===============channelRead0====================:{}", msg);
+//		log.info("===============channelRead0====================:{}", msg);
 		serverHandler.onReceive(session, msg);
 	}
 

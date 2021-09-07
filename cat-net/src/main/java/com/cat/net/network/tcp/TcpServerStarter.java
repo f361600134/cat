@@ -3,7 +3,7 @@ package com.cat.net.network.tcp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cat.net.network.bootstrap.IdleDetectionHandler;
+import com.cat.net.network.bootstrap.CustomeHeartbeatHandler;
 import com.cat.net.network.controller.IControllerDispatcher;
 import com.cat.net.terminal.AbstractServer;
 
@@ -54,11 +54,10 @@ public class TcpServerStarter extends AbstractServer {
 
 	@Override
 	public boolean startServer() throws Exception {
-		DefaultThreadFactory bossTf = new DefaultThreadFactory("TCP_SERVER_BOSS");
-		bossGroup = new NioEventLoopGroup(1, bossTf);
+		
+		bossGroup = new NioEventLoopGroup(1, new DefaultThreadFactory("TCP_SERVER_BOSS"));
 		int threadCount = Runtime.getRuntime().availableProcessors() * 2; // CPU核数 * 2
-		DefaultThreadFactory workerTf = new DefaultThreadFactory("TCP_SERVER_WORKER");
-		workerGroup = new NioEventLoopGroup(threadCount, workerTf);
+		workerGroup = new NioEventLoopGroup(threadCount, new DefaultThreadFactory("TCP_SERVER_WORKER"));
 
 		ChannelFuture future = null;
 		try {
@@ -71,10 +70,11 @@ public class TcpServerStarter extends AbstractServer {
 					.childHandler(new ChannelInitializer<Channel>() {
 						@Override
 						protected void initChannel(Channel ch) throws Exception {
-							ChannelPipeline pipeline = ch.pipeline();
+							final ChannelPipeline pipeline = ch.pipeline();
 							// idle connection detection
-							pipeline.addLast("idleState", new IdleStateHandler(30, 0, 0)); // 默认30秒
-							pipeline.addLast("idleDetection", new IdleDetectionHandler());
+							pipeline.addLast("idleState", new IdleStateHandler(30, 30, 60)); // 默认30秒
+//							pipeline.addLast("idleDetection", new CustomeHeartbeatHandler());
+							
 							// inbound
 							pipeline.addLast("lengthDecoder", new LengthFieldBasedFrameDecoder(8 * 1024, 0, 4, 0, 4));
 //							pipeline.addLast(new FixedLengthFrameDecoder(frameLength));
@@ -118,5 +118,4 @@ public class TcpServerStarter extends AbstractServer {
 		}
 	}
 	
-
 }
