@@ -33,10 +33,6 @@ public class HttpServerStarter extends AbstractServer{
 	private EventLoopGroup bossGroup;
 	private EventLoopGroup workerGroup;
 	
-	public HttpServerStarter(IRequestController controller) {
-		this.controller = controller;
-	}
-	
 	public HttpServerStarter(IRequestController controller, int port) {
 		super(port);
 		this.controller = controller;

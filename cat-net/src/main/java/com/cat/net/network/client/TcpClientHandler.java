@@ -27,20 +27,20 @@ public class TcpClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 	private IControllerDispatcher handler;
 
 	public TcpClientHandler(IControllerDispatcher clientHandler) {
-		log.info("===============TcpClientHandler====================");
+		//log.info("===============TcpClientHandler====================");
 		this.handler = clientHandler;
 	}
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		log.info("===============TcpClientHandler-channelActive====================");
+		//log.info("===============TcpClientHandler-channelActive====================");
 		session = DefaultSession.create(ctx.channel()); // 新建session
 		handler.onConnect(session);
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		log.info("===============TcpClientHandler-channelInactive====================");
+		//log.info("===============TcpClientHandler-channelInactive====================");
 		handler.onClose(session);
 	}
 
@@ -56,7 +56,7 @@ public class TcpClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-		log.info("===============TcpClientHandler-channelRead0====================:{}", msg);
+		//log.info("===============TcpClientHandler-channelRead0====================:{}", msg);
 		handler.onReceive(session, msg);
 	}
 	

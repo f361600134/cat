@@ -1,7 +1,7 @@
 package com.cat.net.terminal;
 
 /**
- * @Description  服务启动抽象层
+ * @Description  服务抽象层
  */
 public abstract class AbstractServer implements IServer {
 	
@@ -17,7 +17,6 @@ public abstract class AbstractServer implements IServer {
 		return runState;
 	}
 	
-	
 	protected void running() {
 		this.runState = true;
 	}
@@ -26,8 +25,6 @@ public abstract class AbstractServer implements IServer {
 	public String getServerId() {
 		return ip.concat(":").concat(String.valueOf(port));
 	}
-	
-	protected AbstractServer() {}
 	
 	protected AbstractServer(String ip, int port) {
 		this.ip = ip;

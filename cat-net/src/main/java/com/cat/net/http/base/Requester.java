@@ -85,7 +85,7 @@ public class Requester {
 				args[i] = paramMap;
 			}
 			else if (paramType.isAssignableFrom(List.class)) {
-				//	若是map类型, 直接把所有参数丢进去
+				//	若是list类型, 直接把所有参数丢进去
 				args[i] = JSONObject.parseObject((String)(paramMap.get(param.getName())), List.class);
 			}
 			else if (TypeUtils.isPrimitiveOrWrapperOrString(paramType)) {
