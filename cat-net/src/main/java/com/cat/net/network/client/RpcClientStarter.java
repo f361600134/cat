@@ -2,12 +2,8 @@ package com.cat.net.network.client;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.cat.net.exception.RpcInvalidConnectException;
 import com.cat.net.network.base.IProtocol;
-import com.cat.net.network.base.ISession;
 import com.cat.net.network.controller.IControllerDispatcher;
 import com.cat.net.network.rpc.IResponseCallback;
 import com.cat.net.network.rpc.RpcCallbackCache;
@@ -24,8 +20,6 @@ import com.cat.net.network.rpc.RpcCallbackHandler;
  */
 public class RpcClientStarter extends TcpClientStarter {
 	
-	private static final Logger log = LoggerFactory.getLogger(TcpClientHandler.class);
-	
 	private final Record record = new Record();
 	
 	/**
@@ -39,7 +33,8 @@ public class RpcClientStarter extends TcpClientStarter {
     protected final RpcCallbackCache callbackCache = new RpcCallbackCache();
     
     public RpcClientStarter(IControllerDispatcher handler, int id, String nodeType, String ip, int port) {
-		super(id, nodeType, ip, port, handler);
+		super(id, nodeType, ip, port);
+		this.clientHandler = new RpcClientHandler(handler, this);
 	}
     
     public Record getRecord() {
@@ -78,26 +73,13 @@ public class RpcClientStarter extends TcpClientStarter {
 		callbackCache.addCallback(futureCallback);
 		//发送消息
 		sendMessage(request);
+		//发送消息成功后, 去检测是否有需要清掉的回调函数
+		callbackCache.checkExpired(now);
 	}
 	
 	public RpcCallbackCache getCallbackCache() {
 		return callbackCache;
 	}
-	
-	public void afterConnect() {
-		if (clientHandler == null) {
-			log.info("clientHandler is null");
-			return;
-		}
-		ISession session = clientHandler.getSession();
-		if (session == null) {
-			log.info("session is null");
-			return;
-		}
-		log.info("===========> 连接成功");
-		session.setUserData(this);
-	}
-
 	
 	 /**
      * 记录

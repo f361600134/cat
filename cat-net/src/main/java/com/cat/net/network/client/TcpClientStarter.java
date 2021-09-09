@@ -22,6 +22,10 @@ import io.netty.handler.timeout.IdleStateHandler;
  */
 public class TcpClientStarter extends AbstractSocketClient{
 	
+	public TcpClientStarter(int connectId, String nodeType, String ip, int port) {
+		super(connectId, nodeType, ip, port);
+	}
+	
 	public TcpClientStarter(int connectId, String nodeType, String ip, int port, IControllerDispatcher handler) {
 		super(connectId, nodeType, ip, port, handler);
 	}

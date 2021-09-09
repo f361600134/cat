@@ -39,7 +39,7 @@ public class DefaultConnectControllerDispatcher extends AbstractControllerDispat
 				mapper.put(cmd.value(), Commander.create(controller, cmd.mustLogin(), method));
 			}
 		}
-		log.info("====>{}",mapper.keySet());
+		//log.info("====>{}",mapper.keySet());
 		log.info("The initialization message[{}] is complete and takes [{}] milliseconds.", mapper.size(),(System.currentTimeMillis() - startTime));
 	}
 	

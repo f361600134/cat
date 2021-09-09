@@ -15,11 +15,6 @@ public enum DisruptorStrategy {
 	SINGLE,
 	
 	/**
-	 * RPC线程组
-	 */
-	RPC,
-	
-	/**
 	 * 在公共线程中执行
 	 */
 	COMMON;
@@ -28,7 +23,6 @@ public enum DisruptorStrategy {
 	
 	static {
 		disruptors.put(SINGLE, new DisruptorExecutorGroup(4, "single-disruptor"));
-		disruptors.put(RPC, new DisruptorExecutorGroup(4, "single-disruptor"));
 		disruptors.put(COMMON, new DisruptorExecutorGroup(1, "common-disruptor"));
 	}
 	

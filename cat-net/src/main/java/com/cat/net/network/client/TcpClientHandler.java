@@ -23,8 +23,8 @@ public class TcpClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
 	private static final Logger log = LoggerFactory.getLogger(TcpClientHandler.class);
 
-	private ISession session;
-	private IControllerDispatcher handler;
+	protected ISession session;
+	protected IControllerDispatcher handler;
 
 	public TcpClientHandler(IControllerDispatcher clientHandler) {
 		//log.info("===============TcpClientHandler====================");

@@ -41,6 +41,11 @@ public abstract class AbstractSocketClient extends AbstractClient implements ICl
 	 */
 	protected AtomicInteger state = new AtomicInteger(STATE_NOT_CONNECT);
 	
+	public AbstractSocketClient(int connectId, String nodeType, String ip, int port) {
+		super(connectId, nodeType, ip, port);
+		group = new NioEventLoopGroup(1, new DefaultThreadFactory("TCP_CLIENT_BOSS"));
+	}
+	
 	public AbstractSocketClient(int connectId, String nodeType, String ip, int port, IControllerDispatcher handler) {
 		super(connectId, nodeType, ip, port);
 		this.clientHandler = new TcpClientHandler(handler);
@@ -74,9 +79,7 @@ public abstract class AbstractSocketClient extends AbstractClient implements ICl
 			this.clientHandler.getHandler().serverStatus(true);
             state.set(STATE_CONNECTED);
             setRunState(true);
-            
             log.info("connect to server successful, host:{}, port:{}", this.getIp(), this.getPort());
-            
             // 线程同步阻塞等连接到指定地址
             ChannelFuture future = bootstrap.connect().sync();
             // 成功连接到端口之后,给channel增加一个 管道关闭的监听器并同步阻塞,直到channel关闭,线程才会往下执行,结束线程
@@ -94,7 +97,7 @@ public abstract class AbstractSocketClient extends AbstractClient implements ICl
 	
 	@Override
 	public boolean isActive() {
-		if (isRunning()) {
+		if (!isRunning()) {
 			return false;
 		}
 		ISession session = this.clientHandler.getSession();
@@ -125,7 +128,7 @@ public abstract class AbstractSocketClient extends AbstractClient implements ICl
 	
 	@Override
 	public void sendMessage(IProtocol protocol) {
-		if (isRunning()) {
+		if (!isRunning()) {
 			return;
 		}
 		ISession session = this.clientHandler.getSession();
