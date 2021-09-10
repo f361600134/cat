@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.cat.net.network.base.DefaultSession;
 import com.cat.net.network.base.ISession;
+import com.cat.net.network.base.ISessionListener;
 import com.cat.net.network.controller.IControllerDispatcher;
 
 import io.netty.buffer.ByteBuf;
@@ -25,16 +26,19 @@ public class TcpClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
 	protected ISession session;
 	protected IControllerDispatcher handler;
+	protected ISessionListener listen;
 
-	public TcpClientHandler(IControllerDispatcher clientHandler) {
+	public TcpClientHandler(IControllerDispatcher clientHandler, ISessionListener listen) {
 		//log.info("===============TcpClientHandler====================");
 		this.handler = clientHandler;
+		this.listen = listen;
 	}
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		//log.info("===============TcpClientHandler-channelActive====================");
 		session = DefaultSession.create(ctx.channel()); // 新建session
+		listen.onCreate(session);
 		handler.onConnect(session);
 	}
 

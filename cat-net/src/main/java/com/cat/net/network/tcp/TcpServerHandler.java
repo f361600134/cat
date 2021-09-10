@@ -7,12 +7,12 @@ import org.slf4j.LoggerFactory;
 
 import com.cat.net.network.base.DefaultSession;
 import com.cat.net.network.base.ISession;
+import com.cat.net.network.base.ISessionListener;
 import com.cat.net.network.controller.IControllerDispatcher;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.util.ReferenceCountUtil;
 
 /**
  * 游戏服务器消息处理器 注意: 
@@ -26,22 +26,27 @@ public class TcpServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
 	private ISession session;
 	private IControllerDispatcher serverHandler;
-
-	public TcpServerHandler(IControllerDispatcher serverHandler) {
+	private ISessionListener listen;
+	
+	
+	public TcpServerHandler(IControllerDispatcher serverHandler, ISessionListener listen) {
 		//log.info("===============TcpServerHandler====================");
 		this.serverHandler = serverHandler;
+		this.listen = listen;
 	}
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		//log.info("===============channelActive====================");
 		session = DefaultSession.create(ctx.channel()); // 新建session
+		listen.onCreate(session);
 		serverHandler.onConnect(session);
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		//log.info("===============channelInactive====================");
+		listen.onRemove(session);
 		serverHandler.onClose(session);
 	}
 

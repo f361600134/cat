@@ -63,7 +63,7 @@ public abstract class AbstractControllerDispatcher<T> implements IControllerDisp
 		DisruptorStrategy.get(DisruptorStrategy.SINGLE).execute(session.getSessionId(), ()->{
 			try {
 				this.invoke(session, commander, packet);
-				log.info("====> DisruptorDispatchTask run, threadName:{}", Thread.currentThread().getName());
+				//log.info("====> DisruptorDispatchTask run, threadName:{}", Thread.currentThread().getName());
 			} catch (Exception e) {
 				log.error("DisruptorDispatchTask error", e);
 			}

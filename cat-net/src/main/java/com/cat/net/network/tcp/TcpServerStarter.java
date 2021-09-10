@@ -1,5 +1,6 @@
 package com.cat.net.network.tcp;
 
+import com.cat.net.network.base.ISessionListener;
 import com.cat.net.network.controller.IControllerDispatcher;
 import com.cat.net.terminal.AbstractSocketServer;
 
@@ -21,7 +22,7 @@ import io.netty.handler.timeout.IdleStateHandler;
  * @author Jeremy
  * @date 2020年7月9日
  */
-public class TcpServerStarter extends AbstractSocketServer {
+public class TcpServerStarter extends AbstractSocketServer implements ISessionListener{
 	
 	public TcpServerStarter(IControllerDispatcher serverHandler, String ip, int port) {
 		super(ip, port, serverHandler);
@@ -43,6 +44,7 @@ public class TcpServerStarter extends AbstractSocketServer {
 	}
 	
 	private ChannelInitializer<Channel> getInitializer() {
+		final TcpServerHandler handler = new TcpServerHandler(serverHandler, this);
 		return new ChannelInitializer<Channel>() {
 			@Override
 			protected void initChannel(Channel ch) throws Exception {
@@ -53,7 +55,7 @@ public class TcpServerStarter extends AbstractSocketServer {
 				
 				// inbound
 				pipeline.addLast("lengthDecoder", new LengthFieldBasedFrameDecoder(8 * 1024, 0, 4, 0, 4));
-				pipeline.addLast("serverHandler", new TcpServerHandler(serverHandler));
+				pipeline.addLast("serverHandler", handler);
 				
 				// outbound
 				pipeline.addLast("lengthEncoder", new LengthFieldPrepender(4));

@@ -3,7 +3,7 @@ package com.cat.net.http.base;
 import java.util.Map;
 
 /**
- * request 請求信息
+ * request 請求信息, 可以在下个版本, 移除掉RequestInfo, 没必要搞一个对象
  * @author Jeremy
  */
 public class RequestInfo {

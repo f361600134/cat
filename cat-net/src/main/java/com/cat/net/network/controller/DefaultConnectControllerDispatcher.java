@@ -73,7 +73,14 @@ public class DefaultConnectControllerDispatcher extends AbstractControllerDispat
 		
 		log.debug("收到协议[{}], pid={}, params={}, size={}B",
 					cmd, session.getUserData(), MessageOutput.create(params), bytes.length);
-		commander.getInvoker().invoke(session, params);
+		
+		//FIXME 这里处理的不好
+		if (commander.getParamNum() == 2) {
+			commander.getInvoker().invoke(session, params);
+		}else if (commander.getParamNum() == 3) {
+			commander.getInvoker().invoke(session, params, packet.seq());
+		}
+		
 		long used = System.currentTimeMillis() - begin;
 		// 协议处理超过1秒
 		if (used > 1000) {

@@ -7,14 +7,12 @@ import java.lang.annotation.Target;
 
 import org.springframework.stereotype.Controller;
 
-import com.cat.net.network.base.AbstractProtocol;
-
 /**
  * Rpc, 用于rpc远程调用注解
  */
 @Controller
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE})
 public @interface Rpc {
 	
 	/**
@@ -22,12 +20,6 @@ public @interface Rpc {
 	 * @return
 	 */
 	int value();
-	
-	/**
-	 * 返回消息对象 跟监听协议号二选一
-	 * @return
-	 */
-	Class<? extends AbstractProtocol> response() default AbstractProtocol.class;
 	
 	/**
 	 * 是否需要验证

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.cat.net.network.base.IProtocol;
 import com.cat.net.network.base.ISession;
+import com.cat.net.network.base.ISessionListener;
 import com.cat.net.network.base.Packet;
 import com.cat.net.network.client.IClientState;
 import com.cat.net.network.client.TcpClientHandler;
@@ -21,9 +22,9 @@ import io.netty.util.concurrent.DefaultThreadFactory;
 /**
  * @Description  服务socket连接启动抽象层
  */
-public abstract class AbstractSocketClient extends AbstractClient implements IClientState{
+public abstract class AbstractSocketClient extends AbstractClient implements IClientState, ISessionListener{
 	
-	private final Logger log = LoggerFactory.getLogger(getClass());
+	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
 	/**
 	 * NioEventLoop并不是一个纯粹的I/O线程，它除了负责I/O的读写之外 创建了两个NioEventLoopGroup，
@@ -41,14 +42,9 @@ public abstract class AbstractSocketClient extends AbstractClient implements ICl
 	 */
 	protected AtomicInteger state = new AtomicInteger(STATE_NOT_CONNECT);
 	
-	public AbstractSocketClient(int connectId, String nodeType, String ip, int port) {
-		super(connectId, nodeType, ip, port);
-		group = new NioEventLoopGroup(1, new DefaultThreadFactory("TCP_CLIENT_BOSS"));
-	}
-	
-	public AbstractSocketClient(int connectId, String nodeType, String ip, int port, IControllerDispatcher handler) {
-		super(connectId, nodeType, ip, port);
-		this.clientHandler = new TcpClientHandler(handler);
+	public AbstractSocketClient(int nodeId, int connectId, String nodeType, String ip, int port, IControllerDispatcher handler) {
+		super(nodeId, connectId, nodeType, ip, port);
+		this.clientHandler = new TcpClientHandler(handler, this);
 		group = new NioEventLoopGroup(1, new DefaultThreadFactory("TCP_CLIENT_BOSS"));
 	}
 	
@@ -142,7 +138,7 @@ public abstract class AbstractSocketClient extends AbstractClient implements ICl
 	
 	@Override
 	public void receiveResponse(IProtocol message) {
-		
+		//TODO something...
 	}
 	
 	@Override
@@ -171,5 +167,10 @@ public abstract class AbstractSocketClient extends AbstractClient implements ICl
 	 * @return
 	 */
 	protected abstract String getServerType();
+	
+	@Override
+	public void onCreate(ISession session) {
+		session.setUserData(this);
+	}
 	
 }

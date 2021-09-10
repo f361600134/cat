@@ -36,7 +36,7 @@ public class DefaultRemoteCallControllerDispatcher extends AbstractControllerDis
 			if (mapper.containsKey(rpc.value())) {
 				throw new RepeatProtoException("发现重复协议号:"+rpc.value());
 			}
-			mapper.put(rpc.value(), RemoteCaller.create(callback, false));
+			mapper.put(rpc.value(), RemoteCaller.create(callback, rpc.isAuth()));
 		}
 		log.info("The initialization [rpc] message[{}] is complete and takes [{}] milliseconds.", mapper.size(),(System.currentTimeMillis() - startTime));
 	}

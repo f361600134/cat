@@ -1,13 +1,18 @@
 package com.cat.net.terminal;
 
+
 public abstract class AbstractClient implements IClient{
+	
+	/**
+	 * 当前节点id
+	 */
+	protected int nodeId;
 	/**
 	 * 连接服务节点的id
 	 */
 	protected int connectId;
 	/**
-	 * 节点类型<br>
-	 * 这里做的有点复杂了,但是没有想到好的方法
+	 * 当前节点类型<br>
 	 */
 	protected String nodeType;
 	
@@ -22,7 +27,8 @@ public abstract class AbstractClient implements IClient{
 	
 	public AbstractClient() {}
 	
-	public AbstractClient(int connectId, String nodeType, String ip, int port) {
+	public AbstractClient(int nodeId, int connectId, String nodeType, String ip, int port) {
+		this.nodeId = nodeId;
 		this.connectId = connectId;
 		this.nodeType = nodeType;
 		this.ip = ip;
@@ -49,6 +55,14 @@ public abstract class AbstractClient implements IClient{
 		this.runState = runState;
 	}
 	
+	public int getNodeId() {
+		return nodeId;
+	}
+
+	public void setNodeId(int nodeId) {
+		this.nodeId = nodeId;
+	}
+
 	@Override
 	public int getConnectId() {
 		return connectId;

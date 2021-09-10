@@ -15,12 +15,17 @@ public class Commander {
 	private final MethodInvoker invoker;
 	private final boolean mustLogin;
 	private final Method protobufParser;
+	/**
+	 * 参数数量
+	 */
+	private final int paramNum;
 
 	public Commander(IController controller, boolean mustLogin, Method method) throws Exception {
 		this.invoker = MethodInvoker.create(controller, method);
 		this.mustLogin = mustLogin;
 		Class<?> paramType = method.getParameterTypes()[1];
 		this.protobufParser = paramType.getMethod("parseFrom", byte[].class);
+		this.paramNum = method.getParameterCount();
 	}
 	
 	public static Commander create(IController controller, boolean mustLogin, Method method) throws Exception {
@@ -40,4 +45,8 @@ public class Commander {
 		return protobufParser;
 	}
 
+	public int getParamNum() {
+		return paramNum;
+	}
+	
 }
