@@ -1,7 +1,5 @@
 package com.cat.net.network.base;
 
-import com.google.protobuf.AbstractMessageLite.Builder;
-
 /**
  * 下发协议接口
  * 
@@ -9,23 +7,26 @@ import com.google.protobuf.AbstractMessageLite.Builder;
  */
 public interface IProtocol {
 	
+	/**
+	 * 协议号
+	 * @return
+	 */
 	int protocol();
 	
-	default byte[] toBytes() {
-		return getBuilder().build().toByteArray();
-	}
-	
-	Builder<?, ?> getBuilder();
+	/**
+	 * 数据流
+	 * @return
+	 */
+	byte[] toBytes();
 	
 	/**
-     * 序号
-     * 
+     * 序列号
      * @return
      */
     int getSeq();
 
     /**
-     * 
+     * 设置序列号
      * @param seq
      */
     void setSeq(int seq);
