@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.cat.net.exception.RpcShutdownException;
 import com.cat.net.exception.RpcTimeoutException;
-import com.google.protobuf.AbstractMessageLite;
+import com.cat.net.network.base.AbstractProtocol;
 
 /**
  * rpc回调缓存
@@ -24,9 +24,9 @@ public class RpcCallbackCache {
     
     private final AtomicBoolean expiredLock = new AtomicBoolean();
 
-    private final ConcurrentMap<Integer, IRpcCallback<? extends AbstractMessageLite<?, ?>>> callbackMap = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Integer, IRpcCallback<? extends AbstractProtocol>> callbackMap = new ConcurrentHashMap<>();
 
-    public void addCallback(IRpcCallback<? extends AbstractMessageLite<?, ?>> callback) {
+    public void addCallback(IRpcCallback<? extends AbstractProtocol> callback) {
         callbackMap.put(callback.getSeq(), callback);
     }
 
@@ -37,7 +37,7 @@ public class RpcCallbackCache {
      * @param response
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void receiveResponse(int seq, int protoId, AbstractMessageLite<?, ?> response) {
+    public void receiveResponse(int seq, int protoId, AbstractProtocol response) {
         IRpcCallback callback = callbackMap.remove(seq);
         if (callback == null) {
             logger.warn("receive response[{}],but callback is expired.", protoId);
@@ -80,10 +80,10 @@ public class RpcCallbackCache {
         }
         if (expiredLock.compareAndSet(false, true)) {
             try {
-              Iterator<Entry<Integer, IRpcCallback<? extends AbstractMessageLite<?, ?>>>> iterator = callbackMap.entrySet().iterator();
+              Iterator<Entry<Integer, IRpcCallback<? extends AbstractProtocol>>> iterator = callbackMap.entrySet().iterator();
                while (iterator.hasNext()) {
-                   Entry<Integer, IRpcCallback<? extends AbstractMessageLite<?, ?>>> entry = iterator.next();
-                   IRpcCallback<? extends AbstractMessageLite<?, ?>> callback = entry.getValue();
+                   Entry<Integer, IRpcCallback<? extends AbstractProtocol>> entry = iterator.next();
+                   IRpcCallback<? extends AbstractProtocol> callback = entry.getValue();
                    if (!callback.isTimeout(now)) {
                        continue;
                    }
@@ -102,21 +102,21 @@ public class RpcCallbackCache {
         if (callbackMap.isEmpty()) {
             return;
         }
-        Iterator<Entry<Integer, IRpcCallback<? extends AbstractMessageLite<?, ?>>>> iterator = callbackMap.entrySet().iterator();
+        Iterator<Entry<Integer, IRpcCallback<? extends AbstractProtocol>>> iterator = callbackMap.entrySet().iterator();
         while (iterator.hasNext()) {
-            Entry<Integer, IRpcCallback<? extends AbstractMessageLite<?, ?>>> entry = iterator.next();
-            IRpcCallback<? extends AbstractMessageLite<?, ?>> callback = entry.getValue();
+            Entry<Integer, IRpcCallback<? extends AbstractProtocol>> entry = iterator.next();
+            IRpcCallback<? extends AbstractProtocol> callback = entry.getValue();
             callback.handleException(new RpcShutdownException());
             iterator.remove();
         }
 
     }
 
-    public IRpcCallback<? extends AbstractMessageLite<?, ?>> getCallback(int seq) {
+    public IRpcCallback<? extends AbstractProtocol> getCallback(int seq) {
         return callbackMap.get(seq);
     }
 
-    public ConcurrentMap<Integer, IRpcCallback<? extends AbstractMessageLite<?, ?>>> getCallbackMap() {
+    public ConcurrentMap<Integer, IRpcCallback<? extends AbstractProtocol>> getCallbackMap() {
         return callbackMap;
     }
 

@@ -2,14 +2,14 @@ package com.cat.net.network.rpc;
 
 import java.util.concurrent.CompletableFuture;
 
-import com.google.protobuf.AbstractMessageLite;
+import com.cat.net.network.base.AbstractProtocol;
 
 /**
  * rpc调用返回
  * @author Jeremy
  * @param <T> 返回消息
  */
-public class RpcCallbackFuture<T extends AbstractMessageLite<?, ?>> extends AbstractRpcCallback<T> {
+public class RpcCallbackFuture<T extends AbstractProtocol> extends AbstractRpcCallback<T> {
 
     private CompletableFuture<T> future;
 

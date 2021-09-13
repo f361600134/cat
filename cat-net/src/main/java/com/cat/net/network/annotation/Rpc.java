@@ -7,6 +7,8 @@ import java.lang.annotation.Target;
 
 import org.springframework.stereotype.Controller;
 
+import com.cat.net.network.base.AbstractProtocol;
+
 /**
  * Rpc, 用于rpc远程调用注解
  */
@@ -26,6 +28,12 @@ public @interface Rpc {
 	 * @return
 	 */
 	boolean isAuth() default true;
+	
+	/**
+	 * 协议, 协议号匹配? 直接丢一个协议对象?
+	 * @return
+	 */
+	Class<? extends AbstractProtocol> protocol() default AbstractProtocol.class;
 	
 
 }

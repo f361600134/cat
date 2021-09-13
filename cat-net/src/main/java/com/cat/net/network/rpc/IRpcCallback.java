@@ -1,13 +1,13 @@
 package com.cat.net.network.rpc;
 
-import com.google.protobuf.AbstractMessageLite;
+import com.cat.net.network.base.AbstractProtocol;
 
 /**
  * rpc回调
  * @author Jeremy
  * @param <T> 返回的消息
  */
-public interface IRpcCallback<T extends AbstractMessageLite<?, ?>> {
+public interface IRpcCallback<T extends AbstractProtocol> {
     /**
      * 消息序号
      * 

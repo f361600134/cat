@@ -1,6 +1,6 @@
 package com.cat.net.network.rpc;
 
-import com.google.protobuf.AbstractMessageLite;
+import com.cat.net.network.base.AbstractProtocol;
 
 /**
  * 抽象rpc回调方法
@@ -8,7 +8,7 @@ import com.google.protobuf.AbstractMessageLite;
  *
  * @param <T>
  */
-public abstract class AbstractRpcCallback<T extends AbstractMessageLite<?, ?>> implements IRpcCallback<T> {
+public abstract class AbstractRpcCallback<T extends AbstractProtocol> implements IRpcCallback<T> {
 
 	/**
 	 * 序列号

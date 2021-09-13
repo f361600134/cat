@@ -1,6 +1,6 @@
 package com.cat.net.network.rpc;
 
-import com.google.protobuf.AbstractMessageLite;
+import com.cat.net.network.base.AbstractProtocol;
 
 /**
  * rpc返回消息的回调
@@ -9,7 +9,7 @@ import com.google.protobuf.AbstractMessageLite;
  *
  * @param <T>
  */
-public interface IResponseCallback<T extends AbstractMessageLite<?, ?>>{
+public interface IResponseCallback<T extends AbstractProtocol>{
 
     /**
      * 接受到回调消息
