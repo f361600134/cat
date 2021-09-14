@@ -14,8 +14,13 @@ import com.cat.net.network.base.AbstractProtocol;
  */
 @Controller
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
+@Target({ElementType.TYPE, ElementType.METHOD})
 public @interface Rpc {
+	
+	/** RPC请求*/
+	public int REQUEST = 1;
+	/** RPC响应 */
+	public int RESPONSE = 2;
 	
 	/**
 	 * 监听协议号????
@@ -24,7 +29,13 @@ public @interface Rpc {
 	int value();
 	
 	/**
-	 * 是否需要验证
+	 * Rpc类型
+	 * @return
+	 */
+	int type() default REQUEST;
+	
+	/**
+	 * 是否需要验证身份
 	 * @return
 	 */
 	boolean isAuth() default true;

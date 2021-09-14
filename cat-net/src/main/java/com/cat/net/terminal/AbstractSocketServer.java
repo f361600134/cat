@@ -16,7 +16,7 @@ import io.netty.util.concurrent.DefaultThreadFactory;
  */
 public abstract class AbstractSocketServer extends AbstractServer {
 	
-	private final Logger log = LoggerFactory.getLogger(AbstractSocketServer.class);
+	protected Logger log = LoggerFactory.getLogger(getClass());
 	
 	/**
 	 * NioEventLoop并不是一个纯粹的I/O线程，它除了负责I/O的读写之外 创建了两个NioEventLoopGroup，

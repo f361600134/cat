@@ -3,11 +3,10 @@ package com.cat.net.network.client;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.cat.net.exception.RpcInvalidConnectException;
-import com.cat.net.network.authenticate.Identity;
 import com.cat.net.network.base.IProtocol;
-import com.cat.net.network.base.ISession;
 import com.cat.net.network.controller.IControllerDispatcher;
 import com.cat.net.network.rpc.IResponseCallback;
+import com.cat.net.network.rpc.IRpcStarter;
 import com.cat.net.network.rpc.Record;
 import com.cat.net.network.rpc.RpcCallbackCache;
 import com.cat.net.network.rpc.RpcCallbackHandler;
@@ -22,7 +21,7 @@ import com.cat.net.network.rpc.RpcCallbackHandler;
  * 
  * @author Jeremy
  */
-public class RpcClientStarter extends TcpClientStarter implements Identity{
+public class RpcClientStarter extends TcpClientStarter implements IRpcStarter{
 	
 	private final Record record = new Record();
 	

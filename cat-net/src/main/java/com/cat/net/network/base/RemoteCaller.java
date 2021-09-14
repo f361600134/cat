@@ -3,10 +3,11 @@ package com.cat.net.network.base;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import com.cat.net.network.controller.IRpcController;
 import com.cat.net.network.rpc.IResponseCallback;
 
 /**
- * 远程调用对象
+ * 远程调用对象, 客户端用命令封装
  * @author Jeremy
  */
 public class RemoteCaller {
@@ -25,8 +26,14 @@ public class RemoteCaller {
 	public Class<?> getParamType() {
 		return paramType;
 	}
-	public static RemoteCaller create(boolean mustLogin, IResponseCallback<? extends AbstractProtocol> callback) throws Exception {
-		//Class<?> paramType = method.getParameterTypes()[1];
+//	public static RemoteCaller create(boolean mustLogin, IResponseCallback<? extends AbstractProtocol> callback) throws Exception {
+//		//Class<?> paramType = method.getParameterTypes()[1];
+//		Type superClass = callback.getClass().getGenericInterfaces()[0];
+//		Class<?> basePoClazz = (Class<?>) (((ParameterizedType) superClass).getActualTypeArguments()[0]);
+//		return new RemoteCaller(mustLogin, basePoClazz);
+//	}
+	
+	public static RemoteCaller create(boolean mustLogin, IRpcController callback) throws Exception {
 		Type superClass = callback.getClass().getGenericInterfaces()[0];
 		Class<?> basePoClazz = (Class<?>) (((ParameterizedType) superClass).getActualTypeArguments()[0]);
 		return new RemoteCaller(mustLogin, basePoClazz);

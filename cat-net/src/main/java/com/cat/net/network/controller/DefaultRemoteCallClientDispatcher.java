@@ -11,14 +11,14 @@ import com.cat.net.network.base.RemoteCaller;
 import com.cat.net.network.client.RpcClientStarter;
 import com.cat.net.network.rpc.IResponseCallback;
 import com.cat.net.network.rpc.RpcCallbackCache;
-import com.cat.net.util.MessageOutput;
 import com.cat.net.util.SerializationUtil;
 
 /**
  * 远程调用控制类
  * @author Jeremy
  */
-public class DefaultRemoteCallControllerDispatcher extends AbstractControllerDispatcher<RemoteCaller> {
+@Deprecated
+public class DefaultRemoteCallClientDispatcher extends AbstractControllerDispatcher<RemoteCaller> {
 	
 	/**
 	 * 初始化
@@ -38,7 +38,7 @@ public class DefaultRemoteCallControllerDispatcher extends AbstractControllerDis
 			}
 			mapper.put(rpc.value(), RemoteCaller.create(rpc.isAuth(), callback));
 		}
-		log.info("The initialization [rpc] message[{}] is complete and takes [{}] milliseconds.", mapper.size(),(System.currentTimeMillis() - startTime));
+		log.info("The initialization [client rpc] message[{}] is complete and takes [{}] milliseconds.", mapper.size(),(System.currentTimeMillis() - startTime));
 	}
 
 	/**

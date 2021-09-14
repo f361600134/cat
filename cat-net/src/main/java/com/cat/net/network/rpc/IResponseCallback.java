@@ -1,6 +1,7 @@
 package com.cat.net.network.rpc;
 
 import com.cat.net.network.base.AbstractProtocol;
+import com.cat.net.network.controller.IRpcController;
 
 /**
  * rpc返回消息的回调
@@ -9,7 +10,7 @@ import com.cat.net.network.base.AbstractProtocol;
  *
  * @param <T>
  */
-public interface IResponseCallback<T extends AbstractProtocol>{
+public interface IResponseCallback<T extends AbstractProtocol> extends IRpcController{
 
     /**
      * 接受到回调消息
