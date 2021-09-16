@@ -14,6 +14,13 @@ public interface IRpcCallback<T extends AbstractProtocol> {
      * @return
      */
     int getSeq();
+    
+    /**
+     * 设置消息序号
+     * 
+     * @return
+     */
+    void setSeq(int seq);
 
     /**
      * 接受到回调消息

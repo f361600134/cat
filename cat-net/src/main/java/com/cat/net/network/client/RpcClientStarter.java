@@ -1,7 +1,5 @@
 package com.cat.net.network.client;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.cat.net.exception.RpcInvalidConnectException;
 import com.cat.net.network.base.IProtocol;
 import com.cat.net.network.controller.IControllerDispatcher;
@@ -25,11 +23,6 @@ public class RpcClientStarter extends TcpClientStarter implements IRpcStarter{
 	
 	private final Record record = new Record();
 	
-	/**
-     * 协议序号生成器<br>
-     * ask操作才使用序号
-     */
-    protected final AtomicInteger seqGenerator = new AtomicInteger();
     /**
      * rpc回调缓存
      */
@@ -43,16 +36,6 @@ public class RpcClientStarter extends TcpClientStarter implements IRpcStarter{
     	return record;
     }
     
-	protected int generateSeq() {
-        int seq = seqGenerator.incrementAndGet();
-        if (seq >= 0) {
-            return seq;
-        }
-        // 重置从1开始
-        seqGenerator.compareAndSet(seq, 1);
-        return seqGenerator.incrementAndGet();
-    }
-
 	/**
 	 * 请求调用
 	 * @param <R>
@@ -66,13 +49,14 @@ public class RpcClientStarter extends TcpClientStarter implements IRpcStarter{
             callback.handleException(new RpcInvalidConnectException());
             return;
         }
-		int seq = generateSeq();
-		request.setSeq(seq);
 		long now = System.currentTimeMillis();
 		long expiredTime = now + timeout;
-		RpcCallbackHandler<?> futureCallback = new RpcCallbackHandler<>(seq, expiredTime, callback);
+		RpcCallbackHandler<?> futureCallback = new RpcCallbackHandler<>(expiredTime, callback);
 		//回调方法加入缓存
 		callbackCache.addCallback(futureCallback);
+		final int seq = futureCallback.getSeq();
+		//设置序列号
+		request.setSeq(seq);
 		//发送消息
 		log.info("发送RPC请求, 节点类型: {}, 客户端:{}", getNodeType(), getConnectId());
 		sendMessage(request);

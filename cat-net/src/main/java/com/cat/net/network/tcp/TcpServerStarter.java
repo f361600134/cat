@@ -44,7 +44,8 @@ public class TcpServerStarter extends AbstractSocketServer implements ISessionLi
 	}
 	
 	private ChannelInitializer<Channel> getInitializer() {
-		final TcpServerHandler handler = new TcpServerHandler(serverHandler, this);
+		//TcpServerHandler handler = new TcpServerHandler(serverHandler, this);
+		TcpServerStarter server = this;
 		return new ChannelInitializer<Channel>() {
 			@Override
 			protected void initChannel(Channel ch) throws Exception {
@@ -55,7 +56,7 @@ public class TcpServerStarter extends AbstractSocketServer implements ISessionLi
 				
 				// inbound
 				pipeline.addLast("lengthDecoder", new LengthFieldBasedFrameDecoder(8 * 1024, 0, 4, 0, 4));
-				pipeline.addLast("serverHandler", handler);
+				pipeline.addLast("serverHandler", new TcpServerHandler(serverHandler, server));
 				
 				// outbound
 				pipeline.addLast("lengthEncoder", new LengthFieldPrepender(4));

@@ -11,8 +11,7 @@ public class RpcCallbackHandler<T extends AbstractProtocol> extends AbstractRpcC
     public RpcCallbackHandler() {
     }
 
-    public RpcCallbackHandler(int seq, long expiredTime, IResponseCallback<T> callback) {
-        this.seq = seq;
+    public RpcCallbackHandler(long expiredTime, IResponseCallback<T> callback) {
         this.expiredTime = expiredTime;
         this.callback = callback;
     }

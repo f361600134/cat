@@ -24,7 +24,7 @@ public class DisruptorExecutor {
 	// 线程名称
 	private static final String DEFAULT_EXECUTOR_NAME = "disruptor-executor";
 	// Disruptor的ringBuffer缓存大小，必须是2的幂
-	private static final int BUFFER_SIZE = 65536;
+	private static final int BUFFER_SIZE = 2<<11;
 
 	// 实际执行task的executor
 	private final ExecutorService executor;

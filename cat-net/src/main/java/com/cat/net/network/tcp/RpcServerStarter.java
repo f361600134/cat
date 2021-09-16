@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.cat.net.network.base.IProtocol;
 import com.cat.net.network.base.ISession;
@@ -24,24 +23,26 @@ import com.cat.net.network.rpc.RpcCallbackHandler;
 public class RpcServerStarter extends TcpServerStarter implements IRpcStarter{
 	
 	/**
-     * 协议序号生成器<br>
-     * ask操作才使用序号
-     */
-    protected final AtomicInteger seqGenerator = new AtomicInteger();
-    /**
-     * rpc回调缓存
-     */
-    protected final RpcCallbackCache callbackCache = new RpcCallbackCache();
+	 * 服务端默认回调缓存超时时间
+	 */
+	private static final long TIMEOUT = 300L;
+	
+	/**
+	 * 回调缓存
+	 */
+	protected final RpcCallbackCache callbackCache = new RpcCallbackCache();
     
 	/**
-	 * key: 节点类型
-	 * value: key: 节点id, session会话
+	 * key: 节点类型<br>
+	 * value: key: 节点id, session会话<br>
 	 * session会话缓存<br>
+	 * 如何清除掉session缓存? FIXME
+	 * 1. cache定时清除.
+	 * 2. 显示清除,重新封装ISession, nodeType, nodeId, session. 当需要清除时, 循环找到对应session清掉
+	 * 2. 
 	 */
 	private Map<String, Map<Integer, ISession>> sessionMap = new ConcurrentHashMap<>();
 	
-	private static final long TIMEOUT = 300L;
-
 	public RpcServerStarter(IControllerDispatcher serverHandler, String ip, int port) {
 		super(serverHandler, ip, port);
 	}
@@ -121,29 +122,19 @@ public class RpcServerStarter extends TcpServerStarter implements IRpcStarter{
 	 * @param callback
 	 */
 	public void ask(String nodeType, int nodeId, IProtocol request, IResponseCallback<?> callback) {
-		int seq = generateSeq();
-		request.setSeq(seq);
 		long now = System.currentTimeMillis();
 		long expiredTime = now + TIMEOUT;
-		RpcCallbackHandler<?> futureCallback = new RpcCallbackHandler<>(seq, expiredTime, callback);
-		//回调方法加入缓存
+		RpcCallbackHandler<?> futureCallback = new RpcCallbackHandler<>(expiredTime, callback);
+		//回调方法加入缓存时,生成序列号
 		callbackCache.addCallback(futureCallback);
+		//设置序列号
+		request.setSeq(futureCallback.getSeq());
 		//发送消息
 		log.info("发送RPC请求, 节点类型: {}, 客户端:{}", nodeType, nodeId);
 		sendMessage(nodeType, nodeId, request);
 		//发送消息成功后, 去检测是否有需要清掉的回调函数
 		callbackCache.checkExpired(now);
 	}
-	
-	protected int generateSeq() {
-        int seq = seqGenerator.incrementAndGet();
-        if (seq >= 0) {
-            return seq;
-        }
-        // 重置从1开始
-        seqGenerator.compareAndSet(seq, 1);
-        return seqGenerator.incrementAndGet();
-    }
 	
 	/**
 	 * 下发消息
@@ -153,7 +144,7 @@ public class RpcServerStarter extends TcpServerStarter implements IRpcStarter{
 	 */
 	private void sendMessage(String nodeType, Collection<Integer> nodeIds, IProtocol request){
 		nodeIds.forEach(nodeId->{
-			sendMessage(nodeType, port, request);
+			sendMessage(nodeType, nodeId, request);
 		});
 	}
 	
@@ -169,18 +160,13 @@ public class RpcServerStarter extends TcpServerStarter implements IRpcStarter{
 	}
 
 	@Override
+	public void onCreate(ISession session) {
+		session.setUserData(this);
+	}
+
+	@Override
 	public RpcCallbackCache getCallbackCache() {
 		return callbackCache;
 	}
 
-	@Override
-	public RpcCallbackCache getRealCallbackCache() {
-		callbackCache.checkExpired(System.currentTimeMillis());
-		return callbackCache;
-	}
-	
-	@Override
-	public void onCreate(ISession session) {
-		session.setUserData(this);
-	}
 }

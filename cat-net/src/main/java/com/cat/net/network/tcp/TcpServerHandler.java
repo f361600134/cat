@@ -11,6 +11,7 @@ import com.cat.net.network.base.ISessionListener;
 import com.cat.net.network.controller.IControllerDispatcher;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -30,22 +31,22 @@ public class TcpServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 	
 	
 	public TcpServerHandler(IControllerDispatcher serverHandler, ISessionListener listen) {
-		//log.info("===============TcpServerHandler====================");
+		log.info("===============TcpServerHandler====================");
 		this.serverHandler = serverHandler;
 		this.listen = listen;
 	}
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		//log.info("===============channelActive====================");
 		session = DefaultSession.create(ctx.channel()); // 新建session
 		listen.onCreate(session);
 		serverHandler.onConnect(session);
+		log.info("===============channelActive===================={}, {}, {}", listen, session, serverHandler);
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		//log.info("===============channelInactive====================");
+		log.info("===============channelInactive====================");
 		listen.onRemove(session);
 		serverHandler.onClose(session);
 	}
@@ -62,7 +63,7 @@ public class TcpServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 	
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-//		log.info("===============channelRead0====================:{}", msg);
+		log.info("===============channelRead0====================:{}", session);
 		serverHandler.onReceive(session, msg);
 	}
 
