@@ -16,7 +16,7 @@ import com.cat.net.network.base.AbstractProtocol;
 
 /**
  * rpc回调缓存
- * @author Jeremy
+ * @author hdh
  * @param <T>
  */
 public class RpcCallbackCache {

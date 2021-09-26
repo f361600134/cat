@@ -4,7 +4,7 @@ import com.cat.net.network.base.AbstractProtocol;
 
 /**
  * 抽象rpc回调方法
- * @author Jeremy
+ * @author hdh
  *
  * @param <T>
  */

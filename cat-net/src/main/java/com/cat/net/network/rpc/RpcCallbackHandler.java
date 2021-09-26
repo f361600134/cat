@@ -2,6 +2,11 @@ package com.cat.net.network.rpc;
 
 import com.cat.net.network.base.AbstractProtocol;
 
+/**
+ * 
+ * @author hdh
+ * @param <T>
+ */
 public class RpcCallbackHandler<T extends AbstractProtocol> extends AbstractRpcCallback<T> {
 
     private IResponseCallback<T> callback;

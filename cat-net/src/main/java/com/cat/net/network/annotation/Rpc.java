@@ -29,10 +29,11 @@ public @interface Rpc {
 	int value();
 	
 	/**
-	 * Rpc类型
+	 * 监听消息类型<br>
+	 * 
 	 * @return
 	 */
-	int type() default REQUEST;
+	int listen() default REQUEST;
 	
 	/**
 	 * 是否需要验证身份
@@ -41,10 +42,10 @@ public @interface Rpc {
 	boolean isAuth() default true;
 	
 	/**
-	 * 协议, 协议号匹配? 直接丢一个协议对象?
+	 * 监听协议
 	 * @return
 	 */
-	Class<? extends AbstractProtocol> protocol() default AbstractProtocol.class;
+	//Class<? extends AbstractProtocol> protocol() default AbstractProtocol.class;
 	
 
 }

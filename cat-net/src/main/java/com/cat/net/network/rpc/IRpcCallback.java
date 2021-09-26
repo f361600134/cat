@@ -4,7 +4,7 @@ import com.cat.net.network.base.AbstractProtocol;
 
 /**
  * rpc回调
- * @author Jeremy
+ * @author hdh
  * @param <T> 返回的消息
  */
 public interface IRpcCallback<T extends AbstractProtocol> {

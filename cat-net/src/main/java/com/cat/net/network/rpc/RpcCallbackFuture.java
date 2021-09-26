@@ -6,7 +6,7 @@ import com.cat.net.network.base.AbstractProtocol;
 
 /**
  * rpc调用返回
- * @author Jeremy
+ * @author hdh
  * @param <T> 返回消息
  */
 public class RpcCallbackFuture<T extends AbstractProtocol> extends AbstractRpcCallback<T> {
