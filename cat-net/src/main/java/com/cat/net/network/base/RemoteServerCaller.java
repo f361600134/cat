@@ -22,7 +22,7 @@ public class RemoteServerCaller extends RemoteCaller{
 		return invoker;
 	}
 	
-	public static RemoteServerCaller create(IRpcController controller, boolean mustLogin, Method method) throws Exception {
+	public static RemoteServerCaller create(IRpcController controller, boolean mustLogin, Method method) {
 		MethodInvoker invoker = MethodInvoker.create(controller, method);
 		Class<?> paramType = method.getParameterTypes()[1];
 		return new RemoteServerCaller(mustLogin, paramType, invoker);
