@@ -18,6 +18,7 @@ import com.cat.net.http.base.RequestInfo;
 import com.cat.net.http.base.Requester;
 import com.cat.net.util.ClassUtils;
 import com.cat.net.util.StringUtils;
+import com.cat.net.util.TypeUtils;
 
 //@Component
 public class RequestProcessor implements InitializingBean{
