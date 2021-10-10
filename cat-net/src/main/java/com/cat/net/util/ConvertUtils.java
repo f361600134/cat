@@ -32,7 +32,7 @@ import com.google.common.reflect.TypeToken;
  * 转换工具类
  */
 public abstract class ConvertUtils {
-
+	
 	private static ConcurrentMap<Type, Converter<?>> converterMap = new ConcurrentHashMap<>();
 
 	public static void registerConverter(Converter<?> converter) {
@@ -508,7 +508,6 @@ public abstract class ConvertUtils {
 				if (StringUtils.isBlank(content)) {
 					return null;
 				}
-
 				return JSON.parseObject(content, targetType);
 			}
 		}

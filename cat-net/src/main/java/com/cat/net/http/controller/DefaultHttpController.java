@@ -98,7 +98,7 @@ public class DefaultHttpController implements IRequestController {
 			if (headers.containsValue(HttpConstant.CONTENTTYPE, HttpHeaderValues.APPLICATION_JSON, true)) {
 				if (httpRequest.content().isReadable()) {
 					String text = httpRequest.content().toString(CharsetUtil.UTF_8);
-					JSONObject jsonObject =JSONObject.parseObject(text);
+					JSONObject jsonObject = JSONObject.parseObject(text);
 					paramMap.putAll(jsonObject);
 				}
 			}else if(headers.containsValue(HttpConstant.CONTENTTYPE, HttpHeaderValues.MULTIPART_FORM_DATA, true)){

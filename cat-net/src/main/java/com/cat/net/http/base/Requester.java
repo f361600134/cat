@@ -9,12 +9,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSONObject;
 import com.cat.net.core.reflect.MethodInvoker;
 import com.cat.net.http.HttpConstant;
 import com.cat.net.http.annatation.Param;
 import com.cat.net.util.ConvertUtils;
-import com.cat.net.util.TypeUtils;
 
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
@@ -84,20 +82,23 @@ public class Requester {
 				//	若是map类型, 直接把所有参数丢进去
 				args[i] = paramMap;
 			}
-			else if (paramType.isAssignableFrom(List.class)) {
-				//	若是list类型, 直接把所有参数丢进去
-				args[i] = JSONObject.parseObject((String)(paramMap.get(param.getName())), List.class);
-			}
-			else if (TypeUtils.isPrimitiveOrWrapperOrString(paramType)) {
-				//	若是基础类型, 直接获取值丢进去
-				Object obj = paramMap.get(param.getName());
-				args[i] = ConvertUtils.convert(obj, param.getParamType());
-			}
 			else {
-				//	否则视为对象类型, 反射生成一个对象
-				JSONObject jsonObject = new JSONObject(paramMap);
-				args[i] = jsonObject.toJavaObject(param.getParamType());
+				args[i] = ConvertUtils.convert(paramMap.get(param.getName()), paramType);
 			}
+//			else if (paramType.isAssignableFrom(List.class)) {
+//				//	若是list类型, 直接把所有参数丢进去
+//				args[i] = JSONObject.parseObject((String)(paramMap.get(param.getName())), List.class);
+//			}
+//			else if (TypeUtils.isPrimitiveOrWrapperOrString(paramType)) {
+//				//	若是基础类型, 直接获取值丢进去
+//				Object obj = paramMap.get(param.getName());
+//				args[i] = ConvertUtils.convert(obj, param.getParamType());
+//			}
+//			else {
+//				//	否则视为对象类型, 反射生成一个对象
+//				JSONObject jsonObject = new JSONObject(paramMap);
+//				args[i] = jsonObject.toJavaObject(param.getParamType());
+//			}
 		}
 		return invoker.invoke(args);
 	}

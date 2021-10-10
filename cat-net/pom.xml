@@ -9,9 +9,9 @@
 		<version>0.0.1</version>
 	</parent>
 
-<!-- 	<groupId>com.cat</groupId> -->
+	<!-- <groupId>com.cat</groupId> -->
 	<artifactId>cat-net</artifactId>
-<!-- 	<version>0.0.1</version> -->
+	<!-- <version>0.0.1</version> -->
 	<packaging>jar</packaging>
 
 	<name>cat-net</name>
@@ -29,23 +29,23 @@
 			<scope>test</scope>
 		</dependency>
 
-	<dependency>
-		<groupId>org.logback-extensions</groupId>
-		<artifactId>logback-ext-spring</artifactId>
-		<version>0.1.4</version>
-	</dependency>
-	
-	<dependency>
-		<groupId>ch.qos.logback</groupId>
-		<artifactId>logback-core</artifactId>
-		<version>1.1.7</version>
-	</dependency>
+		<dependency>
+			<groupId>org.logback-extensions</groupId>
+			<artifactId>logback-ext-spring</artifactId>
+			<version>0.1.4</version>
+		</dependency>
 
-	<dependency>
-		<groupId>ch.qos.logback</groupId>
-		<artifactId>logback-classic</artifactId>
-		<version>1.1.7</version>
-	</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.1.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.7</version>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
 		<dependency>
@@ -82,17 +82,73 @@
 			<version>1.2.75</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.commons</groupId> -->
+		<!-- <artifactId>commons-lang3</artifactId> -->
+		<!-- <version>3.12.0</version> -->
+		<!-- </dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+		<!-- <dependency> -->
+		<!-- <groupId>commons-beanutils</groupId> -->
+		<!-- <artifactId>commons-beanutils</artifactId> -->
+		<!-- <version>1.9.4</version> -->
+		<!-- </dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/io.vertx/vertx-core -->
+		<!-- <dependency> -->
+		<!-- <groupId>io.vertx</groupId> -->
+		<!-- <artifactId>vertx-core</artifactId> -->
+		<!-- <version>4.1.5</version> -->
+		<!-- </dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.13.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.13.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.13.0</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 			<version>5.2.12.RELEASE</version>
 		</dependency>
-		
-		<!-- guava-->
+
+		<!-- guava -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>27.0-jre</version>
+		</dependency>
+
+		<!-- protostuff-core -->
+		<dependency>
+			<groupId>io.protostuff</groupId>
+			<artifactId>protostuff-core</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.protostuff</groupId>
+			<artifactId>protostuff-runtime</artifactId>
+			<version>1.7.2</version>
 		</dependency>
 
 
