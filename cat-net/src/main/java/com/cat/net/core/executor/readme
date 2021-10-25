@@ -3,4 +3,5 @@
 DisruptorExecutorGroup包含指定数量的DisruptorExecutor
 每个DisruptorExecutor都是单线程线程池,
 
-现在这里有一个严重问题, 启动后生成了上千个TaskEvent实例, 需要找到问题原因
+Disruptor的线程组, 用于处理客户端任务, 响应给服务器. 也就是通过Disruptor使玩家线程串行处理.
+业务内的线程模型, 用于处理业务的并发处理.

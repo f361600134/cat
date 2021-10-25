@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -195,10 +196,8 @@ public abstract class ConvertUtils {
 			String stringValue = (String) input;
 
 			try {
-				String datePattern = DatePattern.getPattern(stringValue);
-				if (!StringUtils.isBlank(datePattern)) {
-					return DateUtils.string2Date(stringValue, datePattern);
-				}
+				SimpleDateFormat sFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				return sFormat.parse(stringValue);
 
 			} catch (Exception e) {
 				try {

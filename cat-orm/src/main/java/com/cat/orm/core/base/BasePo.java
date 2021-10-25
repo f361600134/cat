@@ -73,7 +73,9 @@ public abstract class BasePo implements IBasePo, Serializable {
 	}
 
 	/**
-	 * 加载后操作
+	 * 加载后操作, 此操作会改变对象的引用<br>
+	 * 比如定义的map结构, 在类初始化时实例化了map对象<br>
+	 * 在反序列化后, 会改变引用
 	 */
 	@Override
 	public void afterLoad() {

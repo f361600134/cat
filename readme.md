@@ -24,3 +24,17 @@ Wechat: huuzii
 1.新增ISession接口, 用于网络层网络会话.修改会话实现类,GameSession改为DefaultSession,会话连接变得更加纯粹,没有耦合游戏业务.
 2.新增Netty实现的客户端.用于支持s2s通讯
 
+# 修改日志 20210909
+1. 新增基于netty实现的tcp-client端.
+2. 基于client实现的一套rpc-client, 可以简单实现rpc调用.为双向rpc通讯做基础.
+3. 对于服务器端, 新增AbstractSocketServer, 对TcpServer以及WebsocketServer提供一层抽象.
+4. 提供两套转发机制, 一个基于消息号的普通游戏请求转发, 一个是基于rpc的请求转发.
+
+# 修改日志 20210910
+1. 更好的抽象Rpc业务支持, 为双向通讯rpc做支持.
+2. 新增ISessionListener接口, 用于session操作监听, 更好的在启动器内操作session
+
+
+
+
+

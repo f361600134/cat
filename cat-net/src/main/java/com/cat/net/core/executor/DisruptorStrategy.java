@@ -14,16 +14,17 @@ public enum DisruptorStrategy {
 	 */
 	SINGLE,
 	
-	/**
-	 * 在公共线程中执行
-	 */
-	COMMON;
+//	/**
+//	 * 在公共线程中执行
+//	 */
+//	COMMON
+	;
 	
 	private static Map<DisruptorStrategy, DisruptorExecutorGroup> disruptors = new HashMap<>();
 	
 	static {
 		disruptors.put(SINGLE, new DisruptorExecutorGroup(4, "single-disruptor"));
-		disruptors.put(COMMON, new DisruptorExecutorGroup(1, "common-disruptor"));
+//		disruptors.put(COMMON, new DisruptorExecutorGroup(1, "common-disruptor"));
 	}
 	
 	public static DisruptorExecutorGroup get(DisruptorStrategy strategy) {

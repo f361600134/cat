@@ -58,13 +58,12 @@ public class CommonDao<T extends BasePo> implements IDao<T> {
 
 		log.debug("select sql:{}, objs:{}, cls:{}", sql, value, clazz);
 		List<T> basePoList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<T>(clazz), value);
+		if (basePoList.size() == 0) {
+			return null;
+		}
 		if (basePoList.size() > 1) {
 			log.error("Multiple pieces of data correspond to one primary key.cls:{}, sql:{},", clazz, sql);
 		}
-//		if (basePoList.size() == 0) {
-//			return null;
-//		}
-//		T t = basePoList.get(0);
 		return basePoList.get(0);
 	}
 
