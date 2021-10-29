@@ -68,6 +68,7 @@ public class HttpServerStarter extends AbstractServer{
 			bootstrap.option(ChannelOption.SO_BACKLOG, 128);
 			bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
 			
+			this.running();
 			future = bootstrap.bind(port).sync();
 			future.channel().closeFuture().addListener(ChannelFutureListener.CLOSE);
 			return true;
@@ -91,8 +92,9 @@ public class HttpServerStarter extends AbstractServer{
 				workerGroup.shutdownGracefully();
 			}
 			controller.serverStatus(false);// 关服
+			log.info("[HTTP]网络服务已关闭");
 		}else {
-			log.info("HTTP网络服务未在运行状态");
+			log.info("[HTTP]网络服务未在运行状态");
 		}
 	}
 	

@@ -45,6 +45,7 @@ public abstract class AbstractSocketServer extends AbstractServer {
 			ServerBootstrap bootstrap = getBootstrap();
 			future = bootstrap.bind(port).sync();
 			serverHandler.serverStatus(true);
+			this.running();
 			return true;
 		} catch (Exception e) {
 			log.info("", e);
@@ -68,6 +69,7 @@ public abstract class AbstractSocketServer extends AbstractServer {
 				workerGroup.shutdownGracefully();
 			}
 			serverHandler.serverStatus(false);// 关服
+			log.info("[{}]网络服务已关闭", getServerType());
 		}else {
 			log.info("[{}]网络服务未在运行状态", getServerType());
 		}

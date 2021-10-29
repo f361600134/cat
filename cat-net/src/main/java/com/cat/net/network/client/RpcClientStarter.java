@@ -21,6 +21,11 @@ import com.cat.net.network.rpc.RpcCallbackHandler;
  */
 public class RpcClientStarter extends TcpClientStarter implements IRpcStarter{
 	
+	/**
+	 * 默认过期时间
+	 */
+	private final static long EXPIRETIME = 100L;
+	
 	private final Record record = new Record();
 	
     /**
@@ -37,7 +42,7 @@ public class RpcClientStarter extends TcpClientStarter implements IRpcStarter{
     }
     
 	/**
-	 * 请求调用
+	 * 请求调用, 有回调
 	 * @param <R>
 	 */
 	public void ask(IProtocol request, long timeout, IResponseCallback<?> callback) {
@@ -49,6 +54,32 @@ public class RpcClientStarter extends TcpClientStarter implements IRpcStarter{
             callback.handleException(new RpcInvalidConnectException());
             return;
         }
+		doAsk(request, timeout, callback);
+	}
+	
+	/**
+	 * 请求调用, 有回调
+	 * @param <R>
+	 */
+	public void ask(IProtocol request, IResponseCallback<?> callback) {
+		if (callback == null) {
+			sendMessage(request);
+            return;
+        }
+		if (!isActive()) {
+            callback.handleException(new RpcInvalidConnectException());
+            return;
+        }
+		doAsk(request, EXPIRETIME, callback);
+	}
+	
+	/**
+	 * 具体调用
+	 * @param request
+	 * @param timeout
+	 * @param callback
+	 */
+	private void doAsk(IProtocol request, long timeout, IResponseCallback<?> callback) {
 		long now = System.currentTimeMillis();
 		long expiredTime = now + timeout;
 		RpcCallbackHandler<?> futureCallback = new RpcCallbackHandler<>(expiredTime, callback);
