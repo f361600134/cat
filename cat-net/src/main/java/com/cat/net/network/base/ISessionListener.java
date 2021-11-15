@@ -7,7 +7,7 @@ package com.cat.net.network.base;
 public interface ISessionListener {
 
 	/**
-	 * 当创建session
+	 * 建立连接成功, 创建session
 	 * @param session
 	 */
 	default void onCreate(ISession session) {}

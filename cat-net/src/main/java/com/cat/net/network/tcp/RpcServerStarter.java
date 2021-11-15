@@ -2,6 +2,7 @@ package com.cat.net.network.tcp;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -52,6 +53,12 @@ public class RpcServerStarter extends TcpServerStarter implements IRpcStarter{
 		return "Rpc";
 	}
 
+	/**
+	 * 缓存一个新的session
+	 * @param nodeType
+	 * @param nodeId
+	 * @param session
+	 */
 	public void addSession(String nodeType, int nodeId, ISession session) {
 		if (session == null) {
 			log.debug("session is null, nodeType:{}, nodeId:{}", nodeType, nodeId);
@@ -163,6 +170,25 @@ public class RpcServerStarter extends TcpServerStarter implements IRpcStarter{
 	public void onCreate(ISession session) {
 		session.setUserData(this);
 	}
+	
+	/**
+	 * 当session被释放,循环session缓存,找到对应session,移除
+	 */
+	@Override
+	public void onRemove(ISession session) {
+		for (String nodeType : sessionMap.keySet()) {
+			Map<Integer, ISession> map = sessionMap.get(nodeType);
+			Iterator<ISession> iter = map.values().iterator();
+			while (iter.hasNext()) {
+				ISession cur = iter.next();
+				if (cur.equals(session)) {
+					iter.remove();
+					break;
+				}
+			}
+		}
+	}
+	
 
 	@Override
 	public RpcCallbackCache getCallbackCache() {

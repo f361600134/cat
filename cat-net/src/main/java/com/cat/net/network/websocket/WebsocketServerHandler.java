@@ -70,7 +70,7 @@ public class WebsocketServerHandler extends SimpleChannelInboundHandler<Object> 
 		if (msg instanceof HttpRequest) { // 处理握手请求
 			handleHttpRequest(ctx, (HttpRequest) msg);
 		} else if (msg instanceof WebSocketFrame) { // 处理其他请求
-			handleWebSocketFrame(ctx, (WebSocketFrame) msg);
+			handleWebSocketFrame(ctx, (WebSocketFrame) msg);	
 		}else {
 			log.info("Not found msg:{}", msg);
 		}

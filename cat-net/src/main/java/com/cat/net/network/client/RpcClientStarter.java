@@ -1,9 +1,14 @@
 package com.cat.net.network.client;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.cat.net.exception.RpcInvalidConnectException;
+import com.cat.net.network.base.AbstractProtocol;
 import com.cat.net.network.base.IProtocol;
+import com.cat.net.network.base.ISession;
 import com.cat.net.network.controller.IControllerDispatcher;
 import com.cat.net.network.rpc.IResponseCallback;
+import com.cat.net.network.rpc.IRpcAuthenticationListenable;
 import com.cat.net.network.rpc.IRpcStarter;
 import com.cat.net.network.rpc.Record;
 import com.cat.net.network.rpc.RpcCallbackCache;
@@ -33,8 +38,19 @@ public class RpcClientStarter extends TcpClientStarter implements IRpcStarter{
      */
     protected final RpcCallbackCache callbackCache = new RpcCallbackCache();
     
+    /**
+     * rpc身份验证监听
+     */
+    private IRpcAuthenticationListenable listenable;
+    
     public RpcClientStarter(IControllerDispatcher handler, int nodeId, int connectId, String nodeType, String ip, int port) {
 		super(nodeId, connectId, nodeType, ip, port, handler);
+	}
+    
+    public RpcClientStarter(IControllerDispatcher handler, IRpcAuthenticationListenable listenable,
+    		int nodeId, int connectId, String nodeType, String ip, int port) {
+		super(nodeId, connectId, nodeType, ip, port, handler);
+		this.listenable = listenable;
 	}
     
     public Record getRecord() {
@@ -110,6 +126,21 @@ public class RpcClientStarter extends TcpClientStarter implements IRpcStarter{
 	public RpcCallbackCache getRealCallbackCache() {
 		callbackCache.checkExpired(System.currentTimeMillis());
 		return callbackCache;
+	}
+	
+	/**
+	 * 当连接成功, 创建session<br>
+	 * rpc客户端执行一次身份认证
+	 */
+	@Override
+	public void onCreate(ISession session) {
+		super.onCreate(session);
+		if (listenable != null) {
+			Pair<IProtocol, IResponseCallback<? extends AbstractProtocol>> pair = listenable.authentication();
+			IProtocol req = pair.getLeft();
+			IResponseCallback<? extends AbstractProtocol> resp = pair.getRight();
+			this.ask(req, resp);
+		}
 	}
 	
 }

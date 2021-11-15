@@ -34,7 +34,7 @@ public abstract class AbstractHandlerWork<T extends RemoteCaller> implements Han
 	public boolean handler(ISession session, Packet packet) {
 		T caller = mapper.get(packet.cmd());
 		if(caller == null){
-			log.info("监听协议验证为null, 拒绝处理, cmd:[{}]", packet.cmd());
+			log.debug("监听协议验证为null, 拒绝处理, cmd:[{}]", packet.cmd());
 			return false;
 		}
 		if (!checkInvoke(session, caller)) {
