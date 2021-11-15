@@ -89,13 +89,19 @@ public abstract class BasePo implements IBasePo, Serializable {
 				continue;
 			}
 			String columnName = column.value();
-			// if (StringUtils.isBlank(columnName)) {
 			if (columnName == null || columnName.equals("")) {
 				continue;
 			}
-			// 如果是接口类, 不支持接口类的反序列化
-			if (Modifier.isInterface(field.getModifiers())) {
+			/* 优化: 如果是接口类, 并且没有设置反序列化类型, 则抛出异常*/
+			Class<?> clazzType = column.clazzType();
+			if (Modifier.isInterface(field.getModifiers()) 
+					&&  clazzType == null) {
 				throw new UnsupportedOperationException("Can not Deserialization, field:" + field.getName());
+			}
+			//如果是final对象, 则初始化由实现类去控制
+			if (Modifier.isFinal(field.getModifiers())) {
+				log.warn("Can not Deserialization final Object, field:{}", field.getName());
+				continue;
 			}
 			// 通过定义的columnName,反射获取到字段,设置内容
 			try {
@@ -103,14 +109,12 @@ public abstract class BasePo implements IBasePo, Serializable {
 				Field superField = superClazz.getDeclaredField(columnName);
 				superField.setAccessible(true);
 				String value = (String) superField.get(this);
-				// if (StringUtils.isBlank(value)) {
 				if (value == null || value.equals("")) {
 					continue;
 				}
 				// Json转对象
-				Type type = field.getGenericType();
+				Type type = clazzType == null ? field.getGenericType() : clazzType;
 				Object obj = JSONObject.parseObject(value, type);
-
 				// 设置到子类
 				field.setAccessible(true);
 				field.set(this, obj);
