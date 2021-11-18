@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 public @interface Column {
 	
 	/**Column name*/
-	String value() default "";
+	String value();
 	
 	/**Column 反序列化类型, 提供的反序列化类型必须有空构造函数*/
 	Class<?> clazzType() default Object.class;

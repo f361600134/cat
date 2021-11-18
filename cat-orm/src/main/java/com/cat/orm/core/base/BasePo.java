@@ -94,8 +94,9 @@ public abstract class BasePo implements IBasePo, Serializable {
 			}
 			/* 优化: 如果是接口类, 并且没有设置反序列化类型, 则抛出异常*/
 			Class<?> clazzType = column.clazzType();
+			
 			if (Modifier.isInterface(field.getModifiers()) 
-					&&  clazzType == null) {
+					&&  clazzType.isAssignableFrom(Object.class)) {
 				throw new UnsupportedOperationException("Can not Deserialization, field:" + field.getName());
 			}
 			//如果是final对象, 则初始化由实现类去控制
@@ -113,7 +114,7 @@ public abstract class BasePo implements IBasePo, Serializable {
 					continue;
 				}
 				// Json转对象
-				Type type = clazzType == null ? field.getGenericType() : clazzType;
+				Type type = clazzType.isAssignableFrom(Object.class) ? field.getGenericType() : clazzType;
 				Object obj = JSONObject.parseObject(value, type);
 				// 设置到子类
 				field.setAccessible(true);
