@@ -80,9 +80,12 @@ public class DefaultHttpController implements IRequestController {
 		HttpMethod method = httpRequest.method();
 		
 		Map<String, Object> paramMap = new HashMap<>();
+		//	原始参数
+//		Map<String, Object> originalMap = new HashMap<>();
 		//	添加默认httpRequest, httpResponse
 		paramMap.put(HttpConstant.HTTPREQUEST, httpRequest);
 		paramMap.put(HttpConstant.HTTPRESPONSE, httpResponse);
+//		paramMap.put(HttpConstant.HTTPORIGINAL, originalMap);
 		
 		if (HttpMethod.GET == method) {
 			// 是GET请求
