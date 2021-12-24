@@ -147,12 +147,12 @@ public class DefaultHttpController implements IRequestController {
 
 	@Override
 	public void onConnect(FullHttpResponse response) {
-		log.info("默认Http分发处理器连接接开始");
+//		log.info("默认Http分发处理器连接接开始");
 	}
 
 	@Override
 	public void onClose(FullHttpResponse response) {
-		log.info("默认Http分发处理器连接接断开");
+//		log.info("默认Http分发处理器连接接断开");
 	}
 
 }

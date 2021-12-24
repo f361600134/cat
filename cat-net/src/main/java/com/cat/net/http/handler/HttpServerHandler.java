@@ -45,7 +45,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
-		log.info("============channelRead0===========");
+//		log.info("============channelRead0===========");
 		if (!request.decoderResult().isSuccess()) {
 			exceptionCaught(ctx, new IllegalArgumentException());
 			return;
@@ -73,14 +73,14 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 	
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		log.info("===============channelActive===================={}", controller);
+//		log.info("===============channelActive===================={}", controller);
 		this.response = createResponse();
 		controller.onConnect(this.response);
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		log.info("===============channelInactive===================={}", controller);
+//		log.info("===============channelInactive===================={}", controller);
 		controller.onClose(this.response);
 	}
 	
