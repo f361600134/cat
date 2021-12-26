@@ -21,6 +21,7 @@ public class StateUtils {
 		return curState | state; 
 	}
 	
+	
 	/**
 	 * 清除一个状态
 	 */
