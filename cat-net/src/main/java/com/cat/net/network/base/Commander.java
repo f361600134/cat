@@ -12,6 +12,7 @@ import com.cat.net.network.controller.IController;
  */
 public class Commander {
 	
+	private final IController controller;
 	private final MethodInvoker invoker;
 	private final boolean mustLogin;
 	private final Method protobufParser;
@@ -21,6 +22,7 @@ public class Commander {
 	private final int paramNum;
 
 	public Commander(IController controller, boolean mustLogin, Method method) throws Exception {
+		this.controller = controller;
 		this.invoker = MethodInvoker.create(controller, method);
 		this.mustLogin = mustLogin;
 		Class<?> paramType = method.getParameterTypes()[1];
@@ -49,4 +51,7 @@ public class Commander {
 		return paramNum;
 	}
 	
+	public IController getController() {
+		return controller;
+	}
 }

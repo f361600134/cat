@@ -65,14 +65,20 @@ public class DefaultConnectControllerDispatcher extends AbstractControllerDispat
 	@Override
 	public void invoke(ISession session, Commander commander, Packet packet) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		int cmd = packet.cmd();
-		long begin = System.currentTimeMillis();
+		long beginTime = System.currentTimeMillis();
 		byte[] bytes = packet.data();
+		
+		IController controller = commander.getController();
+		if (!controller.verify(session)) {
+			log.info("收到协议[{}], 业务层权限验证失败, pid={}", cmd);
+			return;
+		}
 		
 		Method parser = commander.getProtobufParser();
 		AbstractMessageLite<?, ?> params = (AbstractMessageLite<?, ?>) parser.invoke(null, (Object) bytes);
 		
-		log.debug("收到协议[{}], pid={}, params={}, size={}B",
-					cmd, session.getUserData(), MessageOutput.create(params), bytes.length);
+//		log.debug("收到协议[{}], pid={}, params={}, size={}B",
+//					cmd, session.getUserData(), MessageOutput.create(params), bytes.length);
 		
 		//FIXME 这里处理的不好
 		if (commander.getParamNum() == 2) {
@@ -81,11 +87,13 @@ public class DefaultConnectControllerDispatcher extends AbstractControllerDispat
 			commander.getInvoker().invoke(session, params, packet.seq());
 		}
 		
-		long used = System.currentTimeMillis() - begin;
+		long used = System.currentTimeMillis() - beginTime;
 		// 协议处理超过1秒
 		if (used > 1000) {
-			log.error("协议[{}]处理慢!!!耗时{}ms", cmd, used);
+			log.info("协议[{}]处理慢!!!耗时{}ms", cmd, used);
 		}
+		//协议处理完逻辑后的操作
+		controller.afterProcess(session, beginTime);
 	}
 	
 }
