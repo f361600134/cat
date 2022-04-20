@@ -60,7 +60,7 @@ public abstract class BasePo implements IBasePo, Serializable {
 				Object obj = field.get(this);
 
 				// 转Json
-				String value = JSON.toJSONString(obj);
+				String value = JSON.toJSON(obj).toString();
 
 				// 设置到父类
 				Field superField = superCls.getDeclaredField(columnName);
