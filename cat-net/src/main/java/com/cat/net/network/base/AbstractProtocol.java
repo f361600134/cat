@@ -1,5 +1,7 @@
 package com.cat.net.network.base;
 
+import com.google.protobuf.AbstractMessage;
+
 /**
  * 协议抽象类, 封装序列号
  * @author Jeremy
@@ -24,5 +26,16 @@ public abstract class AbstractProtocol implements IProtocol{
 	public void setSeq(int seq) {
 		this.seq = seq;
 	}
-
+	
+	public AbstractMessage getBuilder() {return null;}
+	
+	@Override
+	public String toString() {
+		return ""+ getBuilder();
+	}
+	
+	@Override
+	public byte[] toBytes() {
+		return getBuilder().toByteArray();
+	}
 }

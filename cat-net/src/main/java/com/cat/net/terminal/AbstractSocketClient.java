@@ -75,7 +75,7 @@ public abstract class AbstractSocketClient extends AbstractClient implements ICl
 			this.clientHandler.getHandler().serverStatus(true);
             state.set(STATE_CONNECTED);
             setRunState(true);
-            log.info("connect to server successful, host:{}, port:{}", this.getIp(), this.getPort());
+            log.info("connect to server successful, host:{}, port:{}, state:{}", this.getIp(), this.getPort(), this.isRunning());
             // 线程同步阻塞等连接到指定地址
             ChannelFuture future = bootstrap.connect().sync();
             // 成功连接到端口之后,给channel增加一个 管道关闭的监听器并同步阻塞,直到channel关闭,线程才会往下执行,结束线程

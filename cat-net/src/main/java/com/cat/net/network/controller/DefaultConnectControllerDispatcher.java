@@ -9,7 +9,6 @@ import com.cat.net.network.annotation.Cmd;
 import com.cat.net.network.base.Commander;
 import com.cat.net.network.base.ISession;
 import com.cat.net.network.base.Packet;
-import com.cat.net.util.MessageOutput;
 import com.google.protobuf.AbstractMessageLite;
 
 /**
@@ -87,13 +86,15 @@ public class DefaultConnectControllerDispatcher extends AbstractControllerDispat
 			commander.getInvoker().invoke(session, params, packet.seq());
 		}
 		
+		//协议处理完逻辑后的操作
+		controller.afterProcess(session, beginTime);
+		
 		long used = System.currentTimeMillis() - beginTime;
 		// 协议处理超过1秒
 		if (used > 1000) {
 			log.info("协议[{}]处理慢!!!耗时{}ms", cmd, used);
 		}
-		//协议处理完逻辑后的操作
-		controller.afterProcess(session, beginTime);
+	
 	}
 	
 }

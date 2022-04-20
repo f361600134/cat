@@ -23,7 +23,7 @@ public abstract class AbstractClient implements IClient{
 	protected int port;
     
    	/** 运行状态 */
-   	protected boolean runState;
+   	protected volatile boolean runState;
 	
 	public AbstractClient() {}
 	
