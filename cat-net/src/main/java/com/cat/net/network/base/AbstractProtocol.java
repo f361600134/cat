@@ -27,7 +27,6 @@ public abstract class AbstractProtocol implements IProtocol{
 		this.seq = seq;
 	}
 	
-	public AbstractMessage getBuilder() {return null;}
 	
 	@Override
 	public String toString() {
@@ -37,5 +36,9 @@ public abstract class AbstractProtocol implements IProtocol{
 	@Override
 	public byte[] toBytes() {
 		return getBuilder().toByteArray();
+	}
+
+	public AbstractMessage getBuilder() {
+		return null;
 	}
 }

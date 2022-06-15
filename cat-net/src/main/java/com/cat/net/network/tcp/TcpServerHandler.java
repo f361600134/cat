@@ -41,7 +41,7 @@ public class TcpServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 		session = DefaultSession.create(ctx.channel()); // 新建session
 		listen.onCreate(session);
 		serverHandler.onConnect(session);
-//		log.info("===============channelActive===================={}, {}, {}", listen, session, serverHandler);
+		//log.info("===============channelActive===================={}, {}, {}", listen, session, serverHandler);
 	}
 
 	@Override
